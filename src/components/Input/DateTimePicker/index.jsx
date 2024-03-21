@@ -6,8 +6,13 @@ function DateTimePicker({label = '', inputAttributes = {}, onChange = () => {}})
 
   const defaultType = 'date'
   const dateTimeTypes = ['date', 'datetime-local']
-  const {value, ...attrs} = inputAttributes
+  let {value, ...attrs} = inputAttributes
+  if(value) {
+    value = value.slice(0, 10) // lấy phần ngày tháng năm
+  }
   const [state, setState] = useState(value ? value : '');
+
+  
 
   // không chỉ định hoặc chỉ định sai kiểu input
   if(!attrs.type || !dateTimeTypes.includes(attrs.type)) {
@@ -20,8 +25,8 @@ function DateTimePicker({label = '', inputAttributes = {}, onChange = () => {}})
   }
 
   return <div className='input-group datetime-picker'>
-    <input {...attrs} onChange={handleChange} value={state} />
-    <label htmlFor={attrs.id} className={!isNaN(Date.parse(state)) ? 'has-value' : ''}>{label}</label>
+    <input {...attrs} onChange={handleChange} value={state || value} />
+    <label htmlFor={attrs.id} className={!isNaN(Date.parse(state || value)) ? 'has-value' : ''}>{label}</label>
   </div>
 }
 

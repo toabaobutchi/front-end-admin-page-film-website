@@ -17,7 +17,7 @@ function CreateMovieForm({ handleSubmit = () => {}, categories = [] }) {
           <FloatLabelInput label='Director name' inputAttributes={{ id: 'director-name', name: 'director', type: 'text' }} />
         </InputRow>
         <InputRow>
-          <FloatLabelInput label='Time' inputAttributes={{ id: 'time', type: 'text', name: 'time' }} />
+          <FloatLabelInput label='Time' inputAttributes={{ id: 'time', type: 'number', name: 'time', min: 1 }} />
           <DateTimePicker label='Launch date' inputAttributes={{ id: 'launchdate', name: 'launchdate' }} />
           <DateTimePicker label='Fishish date' inputAttributes={{ id: 'finishtime', name: 'finishtime' }} />
         </InputRow>

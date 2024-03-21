@@ -14,7 +14,7 @@ import '../Input.scss'
 function FloatLabelInput({
     inputAttributes = {}, 
     label = '', 
-    onChange = () => {}, 
+    onChange = () => {},
     additionalClasses = '', 
     children = ''}
     ) {
@@ -24,17 +24,17 @@ function FloatLabelInput({
   // lấy thuộc tính value ra
   let {value, ...attrs} = inputAttributes
 
-  if(value === undefined) value = ''
+  if(!value) value = ''
 
-  const [input, setInput] = useState(value)
+  const [inputText, setInputText] = useState(value)
 
   const handleInputChange = (e) => {
-    setInput(e.target.value)
+    setInputText(e.target.value)
     onChange(e.target) // gửi về component cha
   }
 
   return <div className={`input-group float-label ${additionalClasses}`}>
-    <input {...attrs} value={input} placeholder=" " onChange={handleInputChange} />
+    <input {...attrs} value={inputText || value} placeholder=" " onChange={handleInputChange} />
     <label htmlFor={attrs.id} >{label}</label>
     {children}
   </div>

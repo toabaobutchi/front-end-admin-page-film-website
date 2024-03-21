@@ -26,8 +26,6 @@
       border-radius: 10px;
       color: var(--primary-color);
     }
-
-
   }
 
   .header-right {
@@ -35,10 +33,10 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    position: relative;
   }
-
+  
   .header-user {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -62,11 +60,12 @@
     position: absolute;
     top: 100%;
     right: 0;
-    width: 50%;
+    width: 100%;
     background-color: #fff;
     box-shadow: 0 0 3px var(--secondary-color);
     z-index: 100;
     transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
+    border-radius: 10px;
     // hide CSS
     height: 0;
     visibility: hidden;

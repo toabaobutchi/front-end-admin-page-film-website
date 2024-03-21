@@ -27,3 +27,8 @@
 .float-label input:required:valid ~ label { // ghi đè CSS ở trên
   color: var(--success-color);
 }
+
+.float-label input[type=number]::-webkit-inner-spin-button, 
+.float-label input[type=number]::-webkit-outer-spin-button {
+  appearance: none;
+}

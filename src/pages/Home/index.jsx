@@ -1,27 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import './Home.scss'
 import MovieCard from '../../components/MovieCard'
-import Modal from '../../components/Modal';
-import FormInfo from '../../components/FormInfo';
-import {
-  FloatLabelInput,
-  InputRow,
-  FloatLabelTextArea,
-  FileDialog,
-  DateTimePicker,
-  Select
-} from '../../components/Input'
-import axios from 'axios';
-import CreateMovieForm from './components/CreateMovieForm';
-import ToastContainer from './../../components/Toast/ToastContainer';
-import Toast from './../../components/Toast';
-import HttpClient from '../../utils/HttpClient';
+import Modal from '../../components/Modal'
+import { FloatLabelInput } from '../../components/Input'
+import axios from 'axios'
+import CreateMovieForm from './components/CreateMovieForm'
+import ToastContainer from './../../components/Toast/ToastContainer'
+import Toast from './../../components/Toast'
+import HttpClient from '../../utils/HttpClient'
+import UpdateMovieForm from './components/UpdateMovieForm'
 
 function Home() {
   // mở modal
-  const [open, setOpen] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [movies, setMovies] = useState([]);
+  const http = new HttpClient() // axios utility
+  const [createModal, setCreateModal] = useState(false)
+  const [categories, setCategories] = useState([])
+  const [movies, setMovies] = useState([])
   const [createToast, setCreateToast] = useState({
     open: false,
     icon: '',
@@ -29,8 +23,9 @@ function Home() {
     title: '',
     content: '',
     type: 'success'
-  });
-
+  })
+  const [movieInfo, setMovieInfo] = useState({})
+  const [updateModal, setUpdateModal] = useState(false)
   const getMoviesData = () => {
     axios.get('http://localhost:3001/api/v1/admin/films')
       .then(res => {
@@ -38,10 +33,10 @@ function Home() {
       })
   }
 
-  const handleToggleModal = () => {
-    setOpen(prev => !prev)
+  const handleToggleCreateModal = () => {
+    setCreateModal(prev => !prev)
     // mở modal thì gọi API
-    if (!open) {
+    if (!createModal) {
       axios.get('http://localhost:3001/api/v1/admin/categories')
         .then(res => {
           setCategories(res.data)
@@ -49,40 +44,21 @@ function Home() {
     }
   }
 
+  const handleToggleUpdateModal = async (id) => {
+    setUpdateModal(prev => !prev)
+    if(!updateModal) {
+      const categories = await http.get('/categories')
+      setCategories(categories);
+
+      const movie = await http.get('/films/' + id)
+      setMovieInfo(movie)
+    }
+  }
+
   const handleCreateSubmit = async (e) => {
     const formData = new FormData(e.target)
-
-    // axios.post('http://localhost:3001/api/v1/admin/films', formData)
-    //   .then(res => {
-    //     if (res.data > 0) {
-    //       setCreateToast({
-    //         ...createToast,
-    //         type: 'success',
-    //         title: 'Notification',
-    //         content: 'A movie was created successfully!',
-    //         open: true,
-    //         icon: <i className="fas fa-plus-circle"></i>,
-    //         closeIcon: <i className="fas fa-times"></i>
-    //       })
-    //       getMoviesData()
-    //     }
-    //     else {
-    //       setCreateToast({
-    //         ...createToast,
-    //         open: true,
-    //         type: 'error',
-    //         title: 'Notification',
-    //         content: 'Can not create the movie!',
-    //         icon: <i className="fas fa-bug"></i>,
-    //         closeIcon: <i className="fas fa-times"></i>
-    //       })
-    //     }
-    //   })
-    //   .catch(err => { console.log(err) })
-
-    const http = new HttpClient();
     const respone = await http.post('/films', formData)
-    
+
     if (respone > 0) {
       setCreateToast({
         ...createToast,
@@ -106,8 +82,7 @@ function Home() {
         closeIcon: <i className="fas fa-times"></i>
       })
     }
-
-    handleToggleModal() // đóng modal chứa form
+    handleToggleCreateModal() // đóng modal chứa form
   }
 
   // hiển thị data
@@ -154,22 +129,24 @@ function Home() {
   //       }
   //       else {
   //         alert('Failed to update!' + + res.data)
-  //       }                
+  //       }
   //     })
+  // }
+
+  // const handleUpdateMovie = async (id) => {
+    
   // }
 
   return (<>
     <div className="movie-action">
       <div className="movie-add-action">
-        <button onClick={handleToggleModal} type="button"><i className="fas fa-plus"></i>&nbsp; Add new movie</button>
-
-        {/* Modal */}
+        <button onClick={handleToggleCreateModal} type="button"><i className="fas fa-plus"></i>&nbsp; Add new movie</button>
         {
-          open && <Modal
-            handleToggleModal={handleToggleModal}
+          createModal && <Modal
+            handleToggleModal={handleToggleCreateModal}
             header='Add new movie'
             closeIcon={<i className="fas fa-times"></i>}
-            open={open} modalType='success'
+            open={createModal} modalType='success'
             footerButtons={[
               {
                 props: {
@@ -205,7 +182,7 @@ function Home() {
         movies.map(item => {
           return <MovieCard key={item.id} imgAttributes={{ src: `http://localhost:3001/images/${item.poster}`, alt: 'Movie card image' }}>
             <button className='btn-success'><i className="far fa-calendar-plus"></i> &nbsp; Add new showtime ...</button>
-            <button className='btn-info'><i className="fas fa-edit"></i> &nbsp; Update information</button>
+            <button className='btn-info' onClick={() => handleToggleUpdateModal(item.id)}><i className="fas fa-edit"></i> &nbsp; Update information</button>
             <button className='btn-danger' onClick={() => { handleDeleteMovie(item.id) }}><i className="far fa-trash-alt"></i> &nbsp; Delete film</button>
           </MovieCard>
         })
@@ -218,7 +195,36 @@ function Home() {
         open: false
       })} />}
     </ToastContainer>
-  </>);
+
+    {
+      updateModal && <Modal
+        handleToggleModal={handleToggleUpdateModal}
+        header='Update movie'
+        closeIcon={<i className="fas fa-times"></i>}
+        open={updateModal} modalType='warning'
+        footerButtons={[
+          {
+            props: {
+              className: 'btn-warning',
+              form: 'update-movie-form'
+            },
+            title: 'Update'
+          },
+          {
+            props: {
+              className: 'btn-danger',
+              closeButton: true,
+              onClick() { }
+            },
+            title: 'Cancel'
+          }
+        ]}
+      >
+        <UpdateMovieForm categories={categories} data={movieInfo} />
+      </Modal>
+    }
+  </>
+  );
 }
 
-export default Home;
+export default Home

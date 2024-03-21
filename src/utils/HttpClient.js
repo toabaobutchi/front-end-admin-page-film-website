@@ -6,9 +6,6 @@ class HttpClient {
       baseURL: 'http://localhost:3001/api/v1/admin',
     });
   }
-  constructor(props) {
-    this.axios = axios.create({...props});
-  }
   async get(url, options = {}) {
     try {
       const respone = await this.axios.get(url, options)
@@ -26,8 +23,8 @@ class HttpClient {
       return respone.data;
     }
     catch (err) {
-      console.table(err); // log error
-      return [];
+      console.label(err); // log error
+      return null;
     }
   }
 }

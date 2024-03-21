@@ -1,3 +1,4 @@
+import './Room.scss'
 function Room() {
   return (<>
     Room page
