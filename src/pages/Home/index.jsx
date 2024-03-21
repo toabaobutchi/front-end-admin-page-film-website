@@ -27,9 +27,7 @@ function Home() {
     closeIcon: '',
     title: '',
     content: '',
-    type:'success',
-    options: {},
-    onRemove: () => { }
+    type:'success'
   });
 
   const getMoviesData = () => {
@@ -57,11 +55,27 @@ function Home() {
     axios.post('http://localhost:3001/api/v1/admin/films', formData)
       .then(res => {
         if (res.data > 0) {
-          alert('Successfully created!')
+          setCreateToast({
+            ...createToast,
+            type: 'success',
+            title: 'Notification',
+            content: 'A movie was created successfully!',
+            open: true,
+            icon: <i className="fas fa-plus-circle"></i>,
+            closeIcon: <i className="fas fa-times"></i>
+          })
           getMoviesData()
         }
         else {
-          alert('Failed to create!')
+          setCreateToast({
+            ...createToast,
+            open: true,
+            type: 'error',
+            title: 'Notification',
+            content: 'Can not create the movie!',
+            icon: <i className="fas fa-bug"></i>,
+            closeIcon: <i className="fas fa-times"></i>
+          })
         }
       })
       .catch(err => { console.log(err) })
@@ -78,11 +92,27 @@ function Home() {
     axios.delete(`http://localhost:3001/api/v1/admin/films/${id}`)
       .then(res => {
         if (res.data > 0) {
-          alert('Successfully deleted!')
+          setCreateToast({
+            ...createToast,
+            type: 'success',
+            title: 'Notification',
+            content: 'A movie was deleted successfully!',
+            open: true,
+            icon: <i className="fas fa-trash-alt"></i>,
+            closeIcon: <i className="fas fa-times"></i>
+          })
           getMoviesData()
         }
         else {
-          alert('Failed to delete!' + + res.data)
+          setCreateToast({
+            ...createToast,
+            open: true,
+            type: 'error',
+            title: 'Notification',
+            content: 'Can not delete the movie!',
+            icon: <i className="fas fa-bug"></i>,
+            closeIcon: <i className="fas fa-times"></i>
+          })
         }
       })
       .catch(err => { console.log(err) })
@@ -100,12 +130,6 @@ function Home() {
   //       }                
   //     })
   // }
-
-  const handleToast = () => {
-    setCreateToast(prev =>!prev)
-  }
-
-  console.log('re-rendering', createToast)
 
   return (<>
     {/* Movie action */}
@@ -164,7 +188,10 @@ function Home() {
     </div>
 
     <ToastContainer>
-      {createToast.open && <Toast title={createToast.title} icon={<i className="fas fa-check-circle"></i>} content='Thông tin' closeIcon={<i className="fas fa-times"></i>} onRemove={handleToast} options = {{delay: 3000}} />}
+      {createToast.open && <Toast title={createToast.title} icon={createToast.icon} content={createToast.content} closeIcon={createToast.closeIcon} onRemove={() => setCreateToast({
+        ...createToast,
+        open: false
+      })} />}
     </ToastContainer>
   </>);
 }
