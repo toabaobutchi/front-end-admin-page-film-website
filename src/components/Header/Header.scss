@@ -1,0 +1,130 @@
+.header {
+  padding: 0.3rem 0.6rem;
+  border-bottom: 1px solid var(--light-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 2;
+
+    a {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--normal-color);
+      text-decoration: none;
+      display: block;
+      padding: 0.8rem 1.6rem;
+      height: 100%;
+    }
+
+    a:hover {
+      border: 1px solid var(--primary-color);
+      border-radius: 10px;
+      color: var(--primary-color);
+    }
+
+
+  }
+
+  .header-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+  }
+
+  .header-user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    padding: 0.8rem 1.6rem;
+    cursor: pointer;
+
+    img {
+      width: 2vw;
+      height: auto;
+    }
+  }
+
+  .header-user:hover {
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    color: var(--primary-color);
+  }
+
+  .header-user-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 50%;
+    background-color: #fff;
+    box-shadow: 0 0 3px var(--secondary-color);
+    z-index: 100;
+    transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
+    // hide CSS
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+
+    a {
+      display: block;
+      padding: .4rem .8rem;
+      text-align: center;
+      text-decoration: none;
+      color: var(--normal-color);
+    }
+  }
+
+  .header-user:hover .header-user-menu {
+    // show CSS
+    padding: 0.8rem 1.6rem;
+    height: auto;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .header-user-name {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .header-user-role {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--secondary-color);
+  }
+
+  .header-menu {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .header-logo img {
+    width: 5vw;
+    height: auto;
+  }
+
+  .header-logo-text-primary {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .header-logo-text-secondary {
+    font-size: 0.8rem;
+  }
+}

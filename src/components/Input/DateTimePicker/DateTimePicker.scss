@@ -1,0 +1,26 @@
+.datetime-picker {
+  position: relative;
+}
+
+.datetime-picker>label {
+  position: absolute;
+  top: 50%;
+  left: 3%;
+  transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transform: translateY(-55%);
+  color: var(--secondary-color);
+}
+
+.datetime-picker > input[type^=date] ~ label {
+  padding: 0 0.5rem;
+  top: 0;
+  background-color: #fff;
+  left: 3%;
+  color: var(--secondary-color);
+}
+
+.datetime-picker>input:focus[type^=date]~label,
+.datetime-picker > input[type^=date] ~ label.has-value {
+  color: var(--primary-color);
+  font-weight: bold;
+}

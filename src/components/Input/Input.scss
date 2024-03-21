@@ -1,0 +1,36 @@
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.input-group input,
+.input-group label {
+  font-size: 1rem;
+}
+
+.input-group input {
+  flex: 1;
+}
+
+.input-group input[type=radio],
+.input-group input[type=checkbox] {
+  display: none;
+}
+
+// .input-group input[type=radio] ~ label,
+// .input-group input[type=checkbox] ~ label {
+//   cursor: pointer;
+//   padding: 0.5rem;
+//   border: 0.2px solid var(--light-color);
+// }
+
+// .input-group input:checked ~ label {
+//   font-weight: bold;
+//   color: var(--primary-color);
+//   font-size: 1rem;
+//   border: none;
+//   border-bottom: 0.2px solid var(--primary-color);
+// }

@@ -1,0 +1,6 @@
+.input-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
+  width: 100%;
+  gap: 1rem;
+}

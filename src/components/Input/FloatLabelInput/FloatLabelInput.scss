@@ -1,0 +1,29 @@
+.float-label {
+  position: relative;
+}
+
+.float-label label {
+  position: absolute;
+  top: 50%;
+  left: 3%;
+  transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transform: translateY(-55%);
+  color: var(--secondary-color);
+  cursor: text;
+}
+
+.float-label input:focus~label,
+.float-label input:not(.float-label input:placeholder-shown, :required, [type=date]) ~ label,
+.float-label label.float,
+.float-label input:required:valid ~ label {
+  padding: 0 0.5rem;
+  top: 0;
+  background-color: #fff;
+  left: 2%;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.float-label input:required:valid ~ label { // ghi đè CSS ở trên
+  color: var(--success-color);
+}

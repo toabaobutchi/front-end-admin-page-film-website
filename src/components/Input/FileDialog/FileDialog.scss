@@ -1,0 +1,38 @@
+input[type=file] {
+  display: none;
+}
+
+input[type=file]~label {
+  border: 0.2px solid var(--light-color);
+  font-size: 1rem;
+  padding: 0.5rem;
+  width: max-content;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--secondary-color);
+}
+
+input[type=file]:focus~label {
+  border: 0.2px solid var(--primary-color);
+}
+
+.file-dialog label:hover,
+.file-dialog.chosen label {
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.file-dialog * {
+  order: 1;
+}
+
+.file-dialog-title {
+  order: 0;
+}
+
+.file-dialog label:hover~.file-dialog-title,
+.file-dialog.chosen label~.file-dialog-title {
+  color: var(--primary-color);
+  font-weight: bold;
+}

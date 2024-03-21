@@ -1,0 +1,93 @@
+.toast {
+  padding: 1.2rem 0.5rem;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  border-left: 7px solid;
+  gap: 1rem;
+  transition: all 0.5s linear;
+  box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.45);
+}
+
+.toast + .toast {
+  margin-top: 0.865rem;
+}
+
+.toast-success {
+  border-left-color: var(--success-color);
+}
+
+.toast-success .toast-icon,
+.toast-success .toast-body-header {
+  color: var(--success-color);
+}
+
+.toast-warning {
+  border-left-color: var(--warning-color);
+}
+
+.toast-warning .toast-icon,
+.toast-warning .toast-body-header {
+  color: var(--warning-color);
+}
+
+.toast-info {
+  border-left-color: var(--info-color);
+}
+
+.toast-info .toast-icon,
+.toast-info .toast-body-header {
+  color: var(--info-color);
+}
+
+.toast-error {
+  border-left-color: var(--error-color);
+}
+
+.toast-error .toast-icon,
+.toast-error .toast-body-header {
+  color: var(--error-color);
+}
+
+@keyframes floatInto {
+  from {
+      opacity: 0;
+      transform: translateX(100%);
+  }
+
+  to {
+      opacity: 1;
+      transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+      opacity: 0;
+      transform: translateX(100%);
+  }
+}
+
+.toast-icon {
+  font-size: 1.5rem;
+}
+
+.toast-body {
+  flex: 1;
+}
+
+.toast-body-header {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.toast-body-content {
+  font-size: 1rem;
+  color: #888;
+  margin-top: 0.5rem;
+}
+.toast-close {
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding-right: 0.5rem;
+}

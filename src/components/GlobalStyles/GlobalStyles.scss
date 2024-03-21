@@ -1,0 +1,44 @@
+:root {
+  --content-width: 70%;
+  --primary-color: #2d83f5;
+  // --success-color: #018d13;
+  --success-color: #00c000;
+  --secondary-color: #777;
+  --info-text: #156bdb;
+  --normal-color: #333;
+  --warning-color: #ffc302;
+  --info-color: #00a8eb;
+  // --danger-color: #ee2260;
+  --danger-color: #e40d4d;
+  --light-color: #ccc;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.content {
+  width: var(--content-width);
+  margin: 0 auto;
+}
+
+button.btn-success {
+  background-color: var(--success-color);
+  color: #fff;
+}
+
+button.btn-info {
+  background-color: var(--info-color);
+  color: #fff;
+}
+
+button.btn-danger {
+  background-color: var(--danger-color);
+  color: #fff;
+}

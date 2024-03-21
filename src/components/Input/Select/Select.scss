@@ -1,0 +1,27 @@
+.select-menu {
+  width: 100%;
+}
+
+.select-menu select {
+  width: 50%;
+  padding: 0.5rem;
+  border: 0.2px solid var(--light-color);
+  outline: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  appearance: none;
+  position: relative;
+}
+
+.select-menu select.cover {
+  width: max-content;
+}
+
+// .select-menu .select-icon {
+//   position: absolute;
+//   top: 50%;
+//   right: 5%;
+//   transform: translateY(-50%);
+//   color: red;
+// }
