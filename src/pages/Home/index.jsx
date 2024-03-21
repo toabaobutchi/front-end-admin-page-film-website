@@ -15,6 +15,7 @@ import axios from 'axios';
 import CreateMovieForm from './components/CreateMovieForm';
 import ToastContainer from './../../components/Toast/ToastContainer';
 import Toast from './../../components/Toast';
+import HttpClient from '../../utils/HttpClient';
 
 function Home() {
   // mở modal
@@ -27,7 +28,7 @@ function Home() {
     closeIcon: '',
     title: '',
     content: '',
-    type:'success'
+    type: 'success'
   });
 
   const getMoviesData = () => {
@@ -48,37 +49,63 @@ function Home() {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleCreateSubmit = async (e) => {
     const formData = new FormData(e.target)
 
-    // do something with form data
-    axios.post('http://localhost:3001/api/v1/admin/films', formData)
-      .then(res => {
-        if (res.data > 0) {
-          setCreateToast({
-            ...createToast,
-            type: 'success',
-            title: 'Notification',
-            content: 'A movie was created successfully!',
-            open: true,
-            icon: <i className="fas fa-plus-circle"></i>,
-            closeIcon: <i className="fas fa-times"></i>
-          })
-          getMoviesData()
-        }
-        else {
-          setCreateToast({
-            ...createToast,
-            open: true,
-            type: 'error',
-            title: 'Notification',
-            content: 'Can not create the movie!',
-            icon: <i className="fas fa-bug"></i>,
-            closeIcon: <i className="fas fa-times"></i>
-          })
-        }
+    // axios.post('http://localhost:3001/api/v1/admin/films', formData)
+    //   .then(res => {
+    //     if (res.data > 0) {
+    //       setCreateToast({
+    //         ...createToast,
+    //         type: 'success',
+    //         title: 'Notification',
+    //         content: 'A movie was created successfully!',
+    //         open: true,
+    //         icon: <i className="fas fa-plus-circle"></i>,
+    //         closeIcon: <i className="fas fa-times"></i>
+    //       })
+    //       getMoviesData()
+    //     }
+    //     else {
+    //       setCreateToast({
+    //         ...createToast,
+    //         open: true,
+    //         type: 'error',
+    //         title: 'Notification',
+    //         content: 'Can not create the movie!',
+    //         icon: <i className="fas fa-bug"></i>,
+    //         closeIcon: <i className="fas fa-times"></i>
+    //       })
+    //     }
+    //   })
+    //   .catch(err => { console.log(err) })
+
+    const http = new HttpClient();
+    const respone = await http.post('/films', formData)
+    
+    if (respone > 0) {
+      setCreateToast({
+        ...createToast,
+        type: 'success',
+        title: 'Notification',
+        content: 'A movie was created successfully!',
+        open: true,
+        icon: <i className="fas fa-plus-circle"></i>,
+        closeIcon: <i className="fas fa-times"></i>
       })
-      .catch(err => { console.log(err) })
+      getMoviesData()
+    }
+    else {
+      setCreateToast({
+        ...createToast,
+        open: true,
+        type: 'error',
+        title: 'Notification',
+        content: 'Can not create the movie!',
+        icon: <i className="fas fa-bug"></i>,
+        closeIcon: <i className="fas fa-times"></i>
+      })
+    }
 
     handleToggleModal() // đóng modal chứa form
   }
@@ -132,7 +159,6 @@ function Home() {
   // }
 
   return (<>
-    {/* Movie action */}
     <div className="movie-action">
       <div className="movie-add-action">
         <button onClick={handleToggleModal} type="button"><i className="fas fa-plus"></i>&nbsp; Add new movie</button>
@@ -162,7 +188,7 @@ function Home() {
               }
             ]}
           >
-            <CreateMovieForm handleSubmit={handleSubmit} categories={categories}/>
+            <CreateMovieForm handleSubmit={handleCreateSubmit} categories={categories} />
           </Modal>
         }
       </div>
@@ -174,7 +200,6 @@ function Home() {
       </FloatLabelInput>
     </div>
 
-    {/* Movie cards */}
     <div className='movie-list'>
       {
         movies.map(item => {
