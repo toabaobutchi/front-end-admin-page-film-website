@@ -61,7 +61,6 @@
   padding: 1rem 0;
 }
 
-
 .form-info {
   display: flex;
   align-items: center;
@@ -69,6 +68,7 @@
   flex-direction: column;
 }
 
-.form-info input:focus, .movie-search-action input:focus {
+.form-info input:focus,
+.movie-search-action input:focus {
   border: 0.2px solid var(--primary-color);
 }
