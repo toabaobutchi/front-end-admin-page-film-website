@@ -9,6 +9,7 @@ import ToastContainer from '@comps/Toast/ToastContainer'
 import Toast from '@comps/Toast'
 import HttpClient from '@utils/HttpClient'
 import UpdateMovieForm from './components//UpdateMovieForm'
+import toast from '@utils/Toast'
 
 function Home() {
   // mở modal
@@ -16,14 +17,7 @@ function Home() {
   const [createModal, setCreateModal] = useState(false)
   const [categories, setCategories] = useState([])
   const [movies, setMovies] = useState([])
-  const [createToast, setCreateToast] = useState({
-    open: false,
-    icon: '',
-    closeIcon: '',
-    title: '',
-    content: '',
-    type: 'success'
-  })
+  const [createToast, setCreateToast] = useState(toast)
   const [movieInfo, setMovieInfo] = useState({})
   const [updateModal, setUpdateModal] = useState(false)
 
@@ -56,9 +50,20 @@ function Home() {
 
   const handleCreateSubmit = async e => {
     const formData = new FormData(e.target)
-    const respone = await http.post('/films', formData)
-
-    if (respone > 0) {
+    const [data, status] = await http.post('/films', formData)
+    console.log(data, status)
+    if (status / 100 != 2) {
+      // status code ~=2xx
+      setCreateToast({
+        ...createToast,
+        type: 'error',
+        title: 'Error',
+        content: 'Error occurred while creating movie!',
+        open: true,
+        icon: <i className='fas fa-exclamation-circle'></i>,
+        closeIcon: <i className='fas fa-times'></i>
+      })
+    } else if (data > 0) {
       setCreateToast({
         ...createToast,
         type: 'success',
@@ -186,6 +191,8 @@ function Home() {
             icon={createToast.icon}
             content={createToast.content}
             closeIcon={createToast.closeIcon}
+            options={{ ...createToast.options }}
+            type={ createToast.type }
             onRemove={() =>
               setCreateToast({
                 ...createToast,

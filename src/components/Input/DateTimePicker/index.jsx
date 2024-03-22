@@ -12,8 +12,6 @@ function DateTimePicker({label = '', inputAttributes = {}, onChange = () => {}})
   }
   const [state, setState] = useState(value ? value : '');
 
-  
-
   // không chỉ định hoặc chỉ định sai kiểu input
   if(!attrs.type || !dateTimeTypes.includes(attrs.type)) {
     attrs.type = defaultType

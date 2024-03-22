@@ -3,7 +3,7 @@
   background-color: #fff;
   display: flex;
   align-items: center;
-  border-left: 7px solid;
+  border-left: 0.5rem solid;
   gap: 1rem;
   transition: all 0.5s linear;
   box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.45);
@@ -70,6 +70,7 @@
 
 .toast-icon {
   font-size: 1.5rem;
+  padding-left: 0.5rem;
 }
 
 .toast-body {
