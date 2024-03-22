@@ -69,14 +69,6 @@
   flex-direction: column;
 }
 
-.form-info input, .movie-search-action input {
-  width: 100%;
-  padding: 0.7rem 1rem;
-  outline: none;
-  border-radius: 1.3rem;
-  border: 0.2px solid var(--light-color);
-}
-
 .form-info input:focus, .movie-search-action input:focus {
   border: 0.2px solid var(--primary-color);
 }

@@ -26,6 +26,7 @@ function Home() {
   })
   const [movieInfo, setMovieInfo] = useState({})
   const [updateModal, setUpdateModal] = useState(false)
+
   const getMoviesData = () => {
     axios.get('http://localhost:3001/api/v1/admin/films')
       .then(res => {
@@ -46,7 +47,7 @@ function Home() {
 
   const handleToggleUpdateModal = async (id) => {
     setUpdateModal(prev => !prev)
-    if(!updateModal) {
+    if (!updateModal) {
       const categories = await http.get('/categories')
       setCategories(categories);
 
@@ -134,40 +135,13 @@ function Home() {
   // }
 
   // const handleUpdateMovie = async (id) => {
-    
+
   // }
 
   return (<>
     <div className="movie-action">
       <div className="movie-add-action">
         <button onClick={handleToggleCreateModal} type="button"><i className="fas fa-plus"></i>&nbsp; Add new movie</button>
-        {
-          createModal && <Modal
-            handleToggleModal={handleToggleCreateModal}
-            header='Add new movie'
-            closeIcon={<i className="fas fa-times"></i>}
-            open={createModal} modalType='success'
-            footerButtons={[
-              {
-                props: {
-                  className: 'btn-success',
-                  form: 'add-movie-form'
-                },
-                title: 'Add'
-              },
-              {
-                props: {
-                  className: 'btn-danger',
-                  closeButton: true,
-                  onClick() { }
-                },
-                title: 'Cancel'
-              }
-            ]}
-          >
-            <CreateMovieForm handleSubmit={handleCreateSubmit} categories={categories} />
-          </Modal>
-        }
       </div>
 
       <FloatLabelInput label='Search movie'
@@ -195,6 +169,34 @@ function Home() {
         open: false
       })} />}
     </ToastContainer>
+
+    {
+      createModal && <Modal
+        handleToggleModal={handleToggleCreateModal}
+        header='Add new movie'
+        closeIcon={<i className="fas fa-times"></i>}
+        open={createModal} modalType='success'
+        footerButtons={[
+          {
+            props: {
+              className: 'btn-success',
+              form: 'add-movie-form'
+            },
+            title: 'Add'
+          },
+          {
+            props: {
+              className: 'btn-danger',
+              closeButton: true,
+              onClick() { }
+            },
+            title: 'Cancel'
+          }
+        ]}
+      >
+        <CreateMovieForm handleSubmit={handleCreateSubmit} categories={categories} />
+      </Modal>
+    }
 
     {
       updateModal && <Modal
