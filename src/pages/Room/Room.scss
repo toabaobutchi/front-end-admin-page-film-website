@@ -42,3 +42,42 @@
 .room-action-search input:focus {
   border: 0.2px solid var(--primary-color);
 }
+.room-data {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.room-data table,
+.room-data th,
+.room-data td {
+  border: 1px solid var(--light-color);
+  border-collapse: collapse;
+  padding: 0.5rem;
+}
+
+.room-data th {
+  background-color: var(--light-color);
+  border: 0.2px solid var(--secondary-color);
+}
+
+.room-data table.room-table {
+  width: max-content;
+  margin: 0 auto;
+}
+
+.room-data table.room-table td {
+  text-align: center;
+}
+
+// .room-data table.room-table td:first-child {
+//   width: 10%;
+// }
+
+.room-data table.room-table td button {
+  padding: 0.7rem 1.3rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 1rem;
+  border: 2px solid #fff;
+}
