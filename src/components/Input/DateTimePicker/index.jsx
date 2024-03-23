@@ -23,8 +23,8 @@ function DateTimePicker({label = '', inputAttributes = {}, onChange = () => {}})
   }
 
   return <div className='input-group datetime-picker'>
-    <input {...attrs} onChange={handleChange} value={state || value} />
-    <label htmlFor={attrs.id} className={!isNaN(Date.parse(state || value)) ? 'has-value' : ''}>{label}</label>
+    <input {...attrs} onChange={handleChange} value={state} />
+    <label htmlFor={attrs.id} className={!isNaN(Date.parse(state)) ? 'has-value' : ''}>{label}</label>
   </div>
 }
 

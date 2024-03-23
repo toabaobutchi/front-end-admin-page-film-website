@@ -17,8 +17,8 @@ function FloatLabelTextArea({textareaAttributes = {}, label = '', onChange = () 
 
   return (
     <div className='input-group float-label'>
-      <textarea {...attrs} value={text || value} onChange={handleChange}></textarea>
-      <label htmlFor={attrs.id} className={text || value ? 'has-value': ''} >{label}</label>
+      <textarea {...attrs} value={text} onChange={handleChange}></textarea>
+      <label htmlFor={attrs.id} className={text ? 'has-value': ''} >{label}</label>
     </div>
   );
 }
