@@ -22,9 +22,9 @@ function FloatLabelInput({
   if(inputAttributes.placeholder) delete inputAttributes.placeholder;
 
   // lấy thuộc tính value ra
-  let {value, ...attrs} = inputAttributes
+  let { value, ...attrs } = inputAttributes
 
-  if(!value) value = ''
+  if (!value) value = ''
 
   const [inputText, setInputText] = useState(value)
 
@@ -34,7 +34,7 @@ function FloatLabelInput({
   }
 
   return <div className={`input-group float-label ${additionalClasses}`}>
-    <input {...attrs} value={inputText || value} placeholder=" " onChange={handleInputChange} />
+    <input {...attrs} value={inputText} placeholder=" " onChange={handleInputChange} />
     <label htmlFor={attrs.id} >{label}</label>
     {children}
   </div>

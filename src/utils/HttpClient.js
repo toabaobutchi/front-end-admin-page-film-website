@@ -21,8 +21,28 @@ class HttpClient {
       const response = await this.axios.post(url, data, options)
       return [response.data, response.status]
     } catch (err) {
-      console.label(err) // log error
-      return null
+      console.table(err) // log error
+      return [null, null]
+    }
+  }
+
+  async put(url, data = {}, options = {}) {
+    try {
+      const response = await this.axios.put(url, data, options)
+      return [response.data, response.status]
+    } catch (err) {
+      console.table(err) // log error
+      return [null, null]
+    }
+  }
+
+  async delete(url, data = {}, options = {}) {
+    try {
+      const response = await this.axios.delete(url, data, options)
+      return [response.data, response.status]
+    } catch (err) {
+      console.table(err) // log error
+      return [null, null]
     }
   }
 }

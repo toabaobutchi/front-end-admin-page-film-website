@@ -11,19 +11,28 @@ import HttpClient from '@utils/HttpClient'
 import UpdateMovieForm from './components//UpdateMovieForm'
 import toast from '@utils/Toast'
 
+const http = new HttpClient() // axios utility
+
 function Home() {
   // mở modal
-  const http = new HttpClient() // axios utility
+
   const [createModal, setCreateModal] = useState(false)
   const [categories, setCategories] = useState([])
   const [movies, setMovies] = useState([])
   const [createToast, setCreateToast] = useState(toast)
-  const [movieInfo, setMovieInfo] = useState({})
-  const [updateModal, setUpdateModal] = useState(false)
+  const [movieInfo, setMovieInfo] = useState(null)
+  // const [updateModal, setUpdateModal] = useState(false)
+  const [willDeletedItem, setWillDeletedItem] = useState(null)
 
-  const getMoviesData = () => {
-    axios.get('http://localhost:3001/api/v1/admin/films').then(res => {
-      setMovies(res.data)
+  const confirmDeletion = async id => {
+    const [data, status] = await http.get(`/films/${id}`) // tìm thông tin
+    if (status / 100 == 2) setWillDeletedItem(data)
+  }
+
+  const fetchMoviesData = () => {
+    http.get('/films').then(response => {
+      const [data] = response
+      setMovies(data)
     })
   }
 
@@ -38,13 +47,14 @@ function Home() {
   }
 
   const handleToggleUpdateModal = async id => {
-    setUpdateModal(prev => !prev)
-    if (!updateModal) {
-      const categories = await http.get('/categories')
+    if (movieInfo === null) {
+      const [categories] = await http.get('/categories')
+      const [movie] = await http.get('/films/' + id)
       setCategories(categories)
-
-      const movie = await http.get('/films/' + id)
       setMovieInfo(movie)
+    }
+    else {
+      setMovieInfo(null) // đóng modal dialog
     }
   }
 
@@ -73,7 +83,7 @@ function Home() {
         icon: <i className='fas fa-plus-circle'></i>,
         closeIcon: <i className='fas fa-times'></i>
       })
-      getMoviesData()
+      fetchMoviesData()
     } else {
       setCreateToast({
         ...createToast,
@@ -90,14 +100,31 @@ function Home() {
 
   // hiển thị data
   useEffect(() => {
-    getMoviesData()
+    const fetchMovies = () => {
+      http.get('/films').then(response => {
+        const [data] = response
+        setMovies(data)
+      })
+    }
+    fetchMovies()
   }, [])
 
   const handleDeleteMovie = id => {
-    axios
-      .delete(`http://localhost:3001/api/v1/admin/films/${id}`)
+    http
+      .delete(`/films/${id}`)
       .then(res => {
-        if (res.data > 0) {
+        const [data, status] = res
+        if (status / 100 !== 2) {
+          setCreateToast({
+            ...createToast,
+            type: 'error',
+            title: 'Error',
+            content: 'An error occurred!',
+            open: true,
+            icon: <i className='fas fa-exclamation-circle'></i>,
+            closeIcon: <i className='fas fa-times'></i>
+          })
+        } else if (data > 0) {
           setCreateToast({
             ...createToast,
             type: 'success',
@@ -107,7 +134,7 @@ function Home() {
             icon: <i className='fas fa-trash-alt'></i>,
             closeIcon: <i className='fas fa-times'></i>
           })
-          getMoviesData()
+          fetchMoviesData()
         } else {
           setCreateToast({
             ...createToast,
@@ -130,7 +157,7 @@ function Home() {
   //     .then(res => {
   //       if (res.data > 0) {
   //         alert('Successfully updated!')
-  //         getMoviesData()
+  //         fetchMoviesData()
   //       }
   //       else {
   //         alert('Failed to update!' + + res.data)
@@ -140,6 +167,45 @@ function Home() {
 
   // const handleUpdateMovie = async (id) => {
   // }
+
+  const handleUpdateSubmit = async (e, id) => {
+    const formData = new FormData(e.target)
+    const [data, status] = await http.put(`/films/${id}`, formData)
+    if (status / 100 != 2) {
+      // status code ~=2xx
+      setCreateToast({
+        ...createToast,
+        type: 'error',
+        title: 'Error',
+        content: 'Error occurred while updating movie!',
+        open: true,
+        icon: <i className='fas fa-exclamation-circle'></i>,
+        closeIcon: <i className='fas fa-times'></i>
+      })
+    } else {
+      if (data > 0) {
+        setCreateToast({
+          ...createToast,
+          type: 'success',
+          title: 'Notification',
+          content: 'A movie was updated successfully!',
+          open: true,
+          icon: <i className='fas fa-edit'></i>,
+          closeIcon: <i className='fas fa-times'></i>
+        })
+      } else {
+        setCreateToast({
+          ...createToast,
+          open: true,
+          type: 'error',
+          title: 'Notification',
+          content: 'Can not update the movie!',
+          icon: <i className='fas fa-bug'></i>,
+          closeIcon: <i className='fas fa-times'></i>
+        })
+      }
+    }
+  }
 
   return (
     <>
@@ -175,7 +241,7 @@ function Home() {
               <button
                 className='btn-danger'
                 onClick={() => {
-                  handleDeleteMovie(item.id)
+                  confirmDeletion(item.id)
                 }}>
                 <i className='far fa-trash-alt'></i> &nbsp; Delete film
               </button>
@@ -192,7 +258,7 @@ function Home() {
             content={createToast.content}
             closeIcon={createToast.closeIcon}
             options={{ ...createToast.options }}
-            type={ createToast.type }
+            type={createToast.type}
             onRemove={() =>
               setCreateToast({
                 ...createToast,
@@ -231,12 +297,11 @@ function Home() {
         </Modal>
       )}
 
-      {updateModal && (
+      {movieInfo !== null && (
         <Modal
           handleToggleModal={handleToggleUpdateModal}
           header='Update movie'
           closeIcon={<i className='fas fa-times'></i>}
-          open={updateModal}
           modalType='warning'
           footerButtons={[
             {
@@ -249,13 +314,43 @@ function Home() {
             {
               props: {
                 className: 'btn-danger',
-                closeButton: true,
-                onClick() {}
+                closeButton: true
               },
               title: 'Cancel'
             }
           ]}>
-          <UpdateMovieForm categories={categories} data={movieInfo} />
+          <UpdateMovieForm handleSubmit={handleUpdateSubmit} categories={categories} data={movieInfo} />
+        </Modal>
+      )}
+
+      {willDeletedItem != null && (
+        <Modal
+          handleToggleModal={() => setWillDeletedItem(null)}
+          header='Delete movie'
+          closeIcon={<i className='fas fa-times'></i>}
+          open={true}
+          modalType='danger'
+          footerButtons={[
+            {
+              props: {
+                className: 'btn-danger'
+              },
+              title: 'Delete',
+              onClick: () => {
+                handleDeleteMovie(willDeletedItem.id)
+              }
+            },
+            {
+              props: {
+                className: 'btn-info',
+                closeButton: true
+              },
+              title: 'Cancel'
+            }
+          ]}>
+          <p>
+            Are you sure to delete <strong>{willDeletedItem.name}</strong> ?
+          </p>
         </Modal>
       )}
     </>
