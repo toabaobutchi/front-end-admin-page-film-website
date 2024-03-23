@@ -10,5 +10,4 @@ function Select({name = '', children = '', selectClasses = '', label = '', id = 
     </select>
   </div>);
 }
-
 export default Select;

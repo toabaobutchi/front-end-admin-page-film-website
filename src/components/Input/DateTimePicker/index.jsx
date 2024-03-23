@@ -12,14 +12,14 @@ function DateTimePicker({label = '', inputAttributes = {}, onChange = () => {}})
   }
   const [state, setState] = useState(value ? value : '');
 
-  // không chỉ định hoặc chỉ định sai kiểu input
+  // không chỉ định hoặc chỉ định sai kiểu input - chỉ nhận 1 trong 2 kiểu date và datetime-local
   if(!attrs.type || !dateTimeTypes.includes(attrs.type)) {
     attrs.type = defaultType
   }
 
   function handleChange(event) {
     setState(event.target.value)
-    onChange(event.target)
+    onChange(event.target) // gửi về cho component cha
   }
 
   return <div className='input-group datetime-picker'>

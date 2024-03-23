@@ -9,7 +9,7 @@ import ToastContainer from '@comps/Toast/ToastContainer'
 import Toast from '@comps/Toast'
 import HttpClient from '@utils/HttpClient'
 import UpdateMovieForm from './components//UpdateMovieForm'
-import toast from '@utils/Toast'
+import toastObj from '@utils/Toast'
 
 const http = new HttpClient() // axios utility
 
@@ -19,7 +19,7 @@ function Home() {
   const [createModal, setCreateModal] = useState(false)
   const [categories, setCategories] = useState([])
   const [movies, setMovies] = useState([])
-  const [createToast, setCreateToast] = useState(toast)
+  const [toast, setToast] = useState(toastObj)
   const [movieInfo, setMovieInfo] = useState(null)
   // const [updateModal, setUpdateModal] = useState(false)
   const [willDeletedItem, setWillDeletedItem] = useState(null)
@@ -64,8 +64,8 @@ function Home() {
     console.log(data, status)
     if (status / 100 != 2) {
       // status code ~=2xx
-      setCreateToast({
-        ...createToast,
+      setToast({
+        ...toast,
         type: 'error',
         title: 'Error',
         content: 'Error occurred while creating movie!',
@@ -74,8 +74,8 @@ function Home() {
         closeIcon: <i className='fas fa-times'></i>
       })
     } else if (data > 0) {
-      setCreateToast({
-        ...createToast,
+      setToast({
+        ...toast,
         type: 'success',
         title: 'Notification',
         content: 'A movie was created successfully!',
@@ -85,8 +85,8 @@ function Home() {
       })
       fetchMoviesData()
     } else {
-      setCreateToast({
-        ...createToast,
+      setToast({
+        ...toast,
         open: true,
         type: 'error',
         title: 'Notification',
@@ -102,8 +102,11 @@ function Home() {
   useEffect(() => {
     const fetchMovies = () => {
       http.get('/films').then(response => {
-        const [data] = response
-        setMovies(data)
+        const [data, status] = response
+        if (status / 100 !== 2) {
+          setMovies([])
+        }
+        else setMovies(data)
       })
     }
     fetchMovies()
@@ -115,8 +118,8 @@ function Home() {
       .then(res => {
         const [data, status] = res
         if (status / 100 !== 2) {
-          setCreateToast({
-            ...createToast,
+          setToast({
+            ...toast,
             type: 'error',
             title: 'Error',
             content: 'An error occurred!',
@@ -125,8 +128,8 @@ function Home() {
             closeIcon: <i className='fas fa-times'></i>
           })
         } else if (data > 0) {
-          setCreateToast({
-            ...createToast,
+          setToast({
+            ...toast,
             type: 'success',
             title: 'Notification',
             content: 'A movie was deleted successfully!',
@@ -136,8 +139,8 @@ function Home() {
           })
           fetchMoviesData()
         } else {
-          setCreateToast({
-            ...createToast,
+          setToast({
+            ...toast,
             open: true,
             type: 'error',
             title: 'Notification',
@@ -152,29 +155,13 @@ function Home() {
       })
   }
 
-  // const handleUpdate = (id) => {
-  //   axios.put(`http://localhost:3001/api/v1/admin/films/${id}`, data)
-  //     .then(res => {
-  //       if (res.data > 0) {
-  //         alert('Successfully updated!')
-  //         fetchMoviesData()
-  //       }
-  //       else {
-  //         alert('Failed to update!' + + res.data)
-  //       }
-  //     })
-  // }
-
-  // const handleUpdateMovie = async (id) => {
-  // }
-
   const handleUpdateSubmit = async (e, id) => {
     const formData = new FormData(e.target)
     const [data, status] = await http.put(`/films/${id}`, formData)
     if (status / 100 != 2) {
       // status code ~=2xx
-      setCreateToast({
-        ...createToast,
+      setToast({
+        ...toast,
         type: 'error',
         title: 'Error',
         content: 'Error occurred while updating movie!',
@@ -184,8 +171,8 @@ function Home() {
       })
     } else {
       if (data > 0) {
-        setCreateToast({
-          ...createToast,
+        setToast({
+          ...toast,
           type: 'success',
           title: 'Notification',
           content: 'A movie was updated successfully!',
@@ -193,9 +180,11 @@ function Home() {
           icon: <i className='fas fa-edit'></i>,
           closeIcon: <i className='fas fa-times'></i>
         })
+        fetchMoviesData()
+        setMovieInfo(null)
       } else {
-        setCreateToast({
-          ...createToast,
+        setToast({
+          ...toast,
           open: true,
           type: 'error',
           title: 'Notification',
@@ -251,17 +240,17 @@ function Home() {
       </div>
 
       <ToastContainer>
-        {createToast.open && (
+        {toast.open && (
           <Toast
-            title={createToast.title}
-            icon={createToast.icon}
-            content={createToast.content}
-            closeIcon={createToast.closeIcon}
-            options={{ ...createToast.options }}
-            type={createToast.type}
+            title={toast.title}
+            icon={toast.icon}
+            content={toast.content}
+            closeIcon={toast.closeIcon}
+            options={{ ...toast.options }}
+            type={toast.type}
             onRemove={() =>
-              setCreateToast({
-                ...createToast,
+              setToast({
+                ...toast,
                 open: false
               })
             }

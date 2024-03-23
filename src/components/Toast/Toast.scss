@@ -41,12 +41,12 @@
 }
 
 .toast-error {
-  border-left-color: var(--error-color);
+  border-left-color: var(--danger-color);
 }
 
 .toast-error .toast-icon,
 .toast-error .toast-body-header {
-  color: var(--error-color);
+  color: var(--danger-color);
 }
 
 @keyframes floatInto {
