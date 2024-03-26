@@ -72,20 +72,30 @@
 .movie-search-action input:focus {
   border: 0.2px solid var(--primary-color);
 }
-.showtimes-item {
-  margin-top: 0.5rem;
+.showtimes-option {
+  margin: 0.5rem 0;
+  height: max-content;
+  padding: 0.5rem;
 }
-.showtimes-item input[type='checkbox'] {
+
+.showtimes-option .input-group {
+  width: 60%;
+}
+
+.showtimes-option input[type='checkbox'] {
   display: none;
+  appearance: none;
+  padding: 0;
 }
-.showtimes-item label {
+.showtimes-option label {
   padding: 0.5rem 1rem;
-  width: 100%;
+  width: max-content;
   border: 0.5px solid var(--light-color);
   color: var(--light-color);
   cursor: pointer;
+  display: block;
 }
-.showtimes-item input[type='checkbox']:checked ~ label {
+.showtimes-option input[type='checkbox']:checked ~ label {
   background-color: var(--primary-color);
   color: #fff;
   font-weight: 600;
@@ -95,9 +105,13 @@
   width: 100%;
 }
 
-.showtimes {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 1rem;
-  padding: 1rem 0;
+#showtime-modal .modal-box {
+  width: 60%;
+}
+
+.show-times-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-top: 0.5px solid var(--light-color);
+  padding: 1rem;
 }

@@ -1,23 +1,20 @@
-import { useEffect, useState } from 'react'
-import './Home.scss'
-import MovieCard from '@comps/MovieCard'
-import Modal from '@comps/Modal'
-import { DateTimePicker, FloatLabelInput, Select } from '@comps/Input'
-import axios from 'axios'
+import UpdateMovieForm from './components//UpdateMovieForm'
+import AddShowTimeForm from './components/AddShowTimeForm'
 import CreateMovieForm from './components/CreateMovieForm'
 import ToastContainer from '@comps/Toast/ToastContainer'
-import Toast from '@comps/Toast'
+import { FloatLabelInput } from '@comps/Input'
+import { useEffect, useState } from 'react'
 import HttpClient from '@utils/HttpClient'
-import UpdateMovieForm from './components//UpdateMovieForm'
+import MovieCard from '@comps/MovieCard'
 import toastObj from '@utils/Toast'
-import FormInfo from '@comps/FormInfo'
-import DateTimeHelper from '@utils/DateTimeHelper'
+import Modal from '@comps/Modal'
+import Toast from '@comps/Toast'
+import axios from 'axios'
+import './Home.scss'
 
 const http = new HttpClient() // axios utility
 
 function Home() {
-  // mở modal
-
   const [createModal, setCreateModal] = useState(false)
   const [categories, setCategories] = useState([])
   const [movies, setMovies] = useState([])
@@ -25,10 +22,7 @@ function Home() {
   const [movieInfo, setMovieInfo] = useState(null)
   const [willDeletedItem, setWillDeletedItem] = useState(null)
   const [rooms, setRooms] = useState([])
-  const [selectedIndex, setSelectedIndex] = useState(0)
-  const [inUsedShowTimes, setInUsedShowTimes] = useState([]) // các suất chiếu đã được sử dụng
-  const [selectedDate, setSelectedDate] = useState('')
-  // const [showTimes, setShowTimes] = useState([])
+
   const confirmDeletion = async id => {
     const [data, status] = await http.get(`/films/${id}`) // tìm thông tin
     if (status / 100 == 2) setWillDeletedItem(data)
@@ -98,16 +92,14 @@ function Home() {
     handleToggleCreateModal() // đóng modal chứa form
   }
   const handleToggleAddShowtimeModal = async id => {
-    if (rooms.length > 0 && movieInfo) {
+    if (rooms.length > 0 && movieInfo != null) {
       setRooms([])
       setMovieInfo(null)
-      setSelectedDate('')
     } else {
       const [rooms] = await http.get('/rooms')
       const [movie] = await http.get('/films/' + id)
       setRooms(rooms)
       setMovieInfo(movie)
-      setSelectedDate(movie.launchdate)
     }
   }
   const handleDeleteMovie = id => {
@@ -192,56 +184,7 @@ function Home() {
       }
     }
   }
-  const handleSelectRoom = select => {
-    const value = select.value
-    setSelectedIndex(value)
-    // gọi API để lấy dữ liệu (các) suất chiếu của phòng được chọn
-    http.get('/show-time/rooms/' + value).then(res => {
-      const [data, status] = res
-      if (status / 100 == 2) {
-        // gọi API thành công
-        setInUsedShowTimes(data)
-      }
-    })
-  }
-  const handleSelectDate = date => {
-    setSelectedDate(date.value)
-  }
-  const getExpectedShowTimes = (selectedDate, movie) => {
-    // tính toán thời gian của suất chiếu đầu tiên
-    // nếu đang trong ngày chiếu của phim thì lấy thời gian chiếu làm thời gian bắt đầu
-    const sDate = DateTimeHelper.MySQLtoJSDate(selectedDate)
-    const lDate = DateTimeHelper.MySQLtoJSDate(movie.launchdate)
-    let initTime = 0
-    if (DateTimeHelper.isSameDay(sDate, lDate)) {
-      // cùng 1 ngày
-      initTime = lDate.getHours()
-    } else initTime = 8 // thời gian mở cửa rạp phim (có thể chỉ định lại)
 
-    // lấy các suất chiếu có thể có
-    const expectedShowTimes = DateTimeHelper.getExpectedShowTimes(sDate, movie.time, initTime)
-
-    if (inUsedShowTimes.length > 0) {
-      expectedShowTimes.filter(e => {
-        inUsedShowTimes.forEach(u => {
-          const actualStartTime = DateTimeHelper.MySQLtoJSDate(u.stime)
-          const actualFinishTime = DateTimeHelper.getAfterTime(actualStartTime, u.ftime).date
-          if (actualStartTime > e.date) {
-            if (actualFinishTime > e.date) return false // loại
-          }
-
-          if (e.date < actualStartTime) {
-            const eFinishTime = DateTimeHelper.getAfterTime(e.date, movie.time).date
-            if (eFinishTime >= actualStartTime) {
-              return false // loại
-            }
-          }
-        })
-        return true // xuất chiếu hợp lệ
-      })
-    }
-    return expectedShowTimes
-  }
   // hiển thị data
   useEffect(() => {
     const fetchMovies = () => {
@@ -344,7 +287,7 @@ function Home() {
         </Modal>
       )}
 
-      {movieInfo !== null && rooms.length <= 0 && (
+      {movieInfo !== null && rooms.length == 0 && (
         <Modal
           handleToggleModal={handleToggleUpdateModal}
           header='Update movie'
@@ -400,60 +343,7 @@ function Home() {
           </p>
         </Modal>
       )}
-
-      {movieInfo && rooms.length > 0 && (
-        <Modal
-          modalType='success'
-          handleToggleModal={() => setMovieInfo(null)}
-          header='Add new showtime'
-          closeIcon={<i className='fas fa-times'></i>}
-          footerButtons={[
-            {
-              props: {
-                className: 'btn-success',
-                form: 'add-showtime-form'
-              },
-              title: 'Add'
-            },
-            {
-              props: {
-                className: 'btn-danger',
-                closeButton: true
-              },
-              title: 'Cancel'
-            }
-          ]}>
-          <FormInfo id='add-showtime-form'>
-            <DateTimePicker label='Show time' inputAttributes={{ type: 'date', name: 'date', value: movieInfo.launchdate }} onChange={handleSelectDate} />
-            <Select label='Select room' value={selectedIndex} onChange={handleSelectRoom}>
-              <option value='0'> -- Select a room -- </option>
-              {rooms.map(item => {
-                return (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
-                )
-              })}
-            </Select>
-            {selectedIndex == 0 && <p> Please choose a room to create show times ! </p>}
-            {selectedIndex != 0 && (
-              <div className='show-times-container'>
-                <p className='show-times-header'>Choose showtime(s)</p>
-                <div className='showtimes'>
-                  {getExpectedShowTimes(selectedDate, movieInfo).map((s, index) => {
-                    return (
-                      <div className='showtimes-item' key={index}>
-                        <input value={s.date.toString()} name='showtimes[]' id={`id-${index}`} type='checkbox' />
-                        <label htmlFor={`id-${index}`}>{s.getString()}</label>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
-          </FormInfo>
-        </Modal>
-      )}
+      {movieInfo && rooms.length > 0 && <AddShowTimeForm handleToggleModal={handleToggleAddShowtimeModal} info={{ movieInfo, rooms }} />}
     </>
   )
 }
