@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './Home.scss'
 import MovieCard from '@comps/MovieCard'
 import Modal from '@comps/Modal'
-import { FloatLabelInput } from '@comps/Input'
+import { DateTimePicker, FloatLabelInput, Select } from '@comps/Input'
 import axios from 'axios'
 import CreateMovieForm from './components/CreateMovieForm'
 import ToastContainer from '@comps/Toast/ToastContainer'
@@ -10,6 +10,8 @@ import Toast from '@comps/Toast'
 import HttpClient from '@utils/HttpClient'
 import UpdateMovieForm from './components//UpdateMovieForm'
 import toastObj from '@utils/Toast'
+import FormInfo from '@comps/FormInfo'
+import DateTimeHelper from '@utils/DateTimeHelper'
 
 const http = new HttpClient() // axios utility
 
@@ -21,21 +23,18 @@ function Home() {
   const [movies, setMovies] = useState([])
   const [toast, setToast] = useState(toastObj)
   const [movieInfo, setMovieInfo] = useState(null)
-  // const [updateModal, setUpdateModal] = useState(false)
   const [willDeletedItem, setWillDeletedItem] = useState(null)
-
+  const [rooms, setRooms] = useState([])
   const confirmDeletion = async id => {
     const [data, status] = await http.get(`/films/${id}`) // tìm thông tin
     if (status / 100 == 2) setWillDeletedItem(data)
   }
-
   const fetchMoviesData = () => {
     http.get('/films').then(response => {
       const [data] = response
       setMovies(data)
     })
   }
-
   const handleToggleCreateModal = () => {
     setCreateModal(prev => !prev)
     // mở modal thì gọi API
@@ -45,23 +44,20 @@ function Home() {
       })
     }
   }
-
   const handleToggleUpdateModal = async id => {
     if (movieInfo === null) {
       const [categories] = await http.get('/categories')
       const [movie] = await http.get('/films/' + id)
       setCategories(categories)
       setMovieInfo(movie)
-    }
-    else {
+    } else {
       setMovieInfo(null) // đóng modal dialog
     }
   }
-
   const handleCreateSubmit = async e => {
     const formData = new FormData(e.target)
     const [data, status] = await http.post('/films', formData)
-    console.log(data, status)
+
     if (status / 100 != 2) {
       // status code ~=2xx
       setToast({
@@ -97,6 +93,12 @@ function Home() {
     }
     handleToggleCreateModal() // đóng modal chứa form
   }
+  const handleToggleAddShowtimeModal = async (id) => {
+    const [rooms] = await http.get('/rooms')
+    const [movie] = await http.get('/films/' + id)
+    setRooms(rooms)
+    setMovieInfo(movie)
+  }
 
   // hiển thị data
   useEffect(() => {
@@ -105,13 +107,11 @@ function Home() {
         const [data, status] = response
         if (status / 100 !== 2) {
           setMovies([])
-        }
-        else setMovies(data)
+        } else setMovies(data)
       })
     }
     fetchMovies()
   }, [])
-
   const handleDeleteMovie = id => {
     http
       .delete(`/films/${id}`)
@@ -154,7 +154,6 @@ function Home() {
         console.log(err)
       })
   }
-
   const handleUpdateSubmit = async (e, id) => {
     const formData = new FormData(e.target)
     const [data, status] = await http.put(`/films/${id}`, formData)
@@ -221,7 +220,7 @@ function Home() {
                 src: `http://localhost:3001/images/${item.poster}`,
                 alt: 'Movie card image'
               }}>
-              <button className='btn-success'>
+              <button className='btn-success' onClick={() => handleToggleAddShowtimeModal(item.id)}>
                 <i className='far fa-calendar-plus'></i> &nbsp; Add new showtime ...
               </button>
               <button className='btn-info' onClick={() => handleToggleUpdateModal(item.id)}>
@@ -263,7 +262,6 @@ function Home() {
           handleToggleModal={handleToggleCreateModal}
           header='Add new movie'
           closeIcon={<i className='fas fa-times'></i>}
-          open={createModal}
           modalType='success'
           footerButtons={[
             {
@@ -286,7 +284,7 @@ function Home() {
         </Modal>
       )}
 
-      {movieInfo !== null && (
+      {movieInfo !== null && rooms.length <= 0 && (
         <Modal
           handleToggleModal={handleToggleUpdateModal}
           header='Update movie'
@@ -340,6 +338,45 @@ function Home() {
           <p>
             Are you sure to delete <strong>{willDeletedItem.name}</strong> ?
           </p>
+        </Modal>
+      )}
+
+      {movieInfo && rooms.length > 0 && (
+        <Modal
+          modalType='success'
+          handleToggleModal={() => setMovieInfo(null)}
+          header='Add new showtime'
+          closeIcon={<i className='fas fa-times'></i>}
+          footerButtons={[
+            {
+              props: {
+                className: 'btn-success',
+                form: 'add-showtime-form'
+              },
+              title: 'Add'
+            },
+            {
+              props: {
+                className: 'btn-danger',
+                closeButton: true
+              },
+              title: 'Cancel'
+            }
+          ]}>
+          <FormInfo id='add-showtime-form'>
+            <DateTimePicker label='Show time' inputAttributes={{ type: 'date', name: 'time', value: movieInfo.launchdate }} />
+            <Select label='Select room'>
+              {console.log(DateTimeHelper.getDateTime(movieInfo.launchdate))}
+              {console.log(movieInfo.launchdate)}
+              {rooms.map(item => {
+                return (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                )
+              })}
+            </Select>
+          </FormInfo>
         </Modal>
       )}
     </>

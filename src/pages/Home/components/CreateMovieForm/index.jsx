@@ -11,8 +11,7 @@ function CreateMovieForm({ handleSubmit = () => {}, categories = [] }) {
             inputAttributes={{
               id: 'movie-name',
               name: 'name',
-              type: 'text',
-              required: true
+              type: 'text'
             }}
           />
           <FloatLabelInput

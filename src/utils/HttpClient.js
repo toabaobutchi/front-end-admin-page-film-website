@@ -3,7 +3,11 @@ import axios from 'axios'
 class HttpClient {
   constructor() {
     this.axios = axios.create({
-      baseURL: 'http://localhost:3001/api/v1/admin'
+      baseURL: 'http://localhost:3001/api/v1/admin',
+      timeout: 5000,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     })
   }
   async get(url, options = {}) {
