@@ -35,6 +35,9 @@ class DateTimeHelper {
     while (current.date.getHours() < 23) {
       // vãn còn trong ngày
       current = DateTimeHelper.getAfterTime(current.date, time)
+      if (current.date.getHours() < initTime) {
+        break;
+      }
       sets.push(current)
     }
     return sets
@@ -42,6 +45,10 @@ class DateTimeHelper {
 
   static isSameDay(date1, date2) {
     return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate()
+  }
+
+  static JSDateToMySQLDate(date) {
+    return date.toLocaleString('sv-SE')
   }
 }
 

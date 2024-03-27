@@ -21,7 +21,7 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
     setSelectedRoomIndex(value)
     // gọi API để lấy dữ liệu (các) suất chiếu của phòng được chọn
     if (value != 0) {
-      http.get('/show-time/rooms/' + value).then(res => {
+      http.get('/show-times/rooms/' + value).then(res => {
         const [data, status] = res
         if (status / 100 == 2) {
           // gọi API thành công
@@ -41,7 +41,7 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
     setSelectedShowTimes(updatedShowTimes)
   }
 
-  const handleChangePrice = (input) => {
+  const handleChangePrice = input => {
     const updatedPrice = [...selectedShowTimes]
     updatedPrice[parseInt(input.getAttribute('index'))].price = input.value
     setSelectedShowTimes(updatedPrice)
@@ -64,7 +64,6 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
         return []
       }
     }
-
     // lấy các suất chiếu có thể có
     const expectedShowTimes = DateTimeHelper.getExpectedShowTimes(sDate, movie.time, initTime)
 
@@ -96,7 +95,21 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
     setSelectedShowTimes(getExpectedShowTimes(movieInfo))
   }, [selectedDate])
 
-  const handleSubmit = e => { }
+  const handleSubmit = e => {
+    const movieId = movieInfo.id
+    const roomId = selectedRoomIndex
+    const showTimes = selectedShowTimes.filter(show => show.checked == true).map(show => ({ time: DateTimeHelper.JSDateToMySQLDate(show.date), price: show.price }))
+    http
+      .post('/show-times', {
+        room_id: roomId,
+        film_id: movieId,
+        showtimes: showTimes
+      })
+      .then(res => {
+        handleToggleModal(0)
+        console.log(res);
+      })
+  }
 
   return (
     <Modal
@@ -137,7 +150,7 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
             )
           })}
         </Select>
-        {selectedRoomIndex == 0 && <p style={{fontSize: '1.2rem', fontWeight: '600', color: 'red'}}> Please choose a room to create show times ! </p>}
+        {selectedRoomIndex == 0 && <p style={{ fontSize: '1.2rem', fontWeight: '600', color: 'red' }}> Please choose a room to create show times ! </p>}
         {selectedRoomIndex != 0 && (
           <div className='show-times-container'>
             <p className='show-times-header'>Choose showtime(s)</p>
