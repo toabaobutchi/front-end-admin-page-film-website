@@ -35,7 +35,7 @@ class DateTimeHelper {
     while (current.date.getHours() < 23) {
       // vãn còn trong ngày
       current = DateTimeHelper.getAfterTime(current.date, time)
-      if (current.date.getHours() < initTime) {
+      if (current.date.getHours() >= 23 || current.date.getHours() < initTime) {
         break;
       }
       sets.push(current)

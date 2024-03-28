@@ -97,8 +97,8 @@ function Home() {
       setMovieInfo(null)
     } else {
       const [rooms] = await http.get('/rooms')
-      const [movie] = await http.get('/films/' + id)
       setRooms(rooms)
+      const [movie] = await http.get('/films/' + id)
       setMovieInfo(movie)
     }
   }

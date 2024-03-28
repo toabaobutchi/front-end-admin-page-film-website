@@ -12,8 +12,8 @@ function UpdateMovieForm({ handleSubmit = () => {}, categories = [], data = {} }
         </InputRow>
         <InputRow>
           <FloatLabelInput label='Time' inputAttributes={{ id: 'time', type: 'number', name: 'time', value: time }} />
-          <DateTimePicker label='Launch date' inputAttributes={{ id: 'launchdate', name: 'launchdate', value: launchdate }} />
-          <DateTimePicker label='Fishish date' inputAttributes={{ id: 'finishtime', name: 'finishtime', value: finishtime }} />
+          <DateTimePicker label='Launch date' inputAttributes={{ id: 'launchdate', type: 'datetime-local', name: 'launchdate', value: launchdate }} />
+          <DateTimePicker label='Fishish date' inputAttributes={{ id: 'finishtime', type: 'datetime-local', name: 'finishtime', value: finishtime }} />
         </InputRow>
         <FloatLabelInput label='Actors' inputAttributes={{ id: 'actors', type: 'text', name: 'actors', value: actors }} />
         <FloatLabelTextArea label='Description' textareaAttributes={{ id: 'desc', name: 'description', value: description }} />

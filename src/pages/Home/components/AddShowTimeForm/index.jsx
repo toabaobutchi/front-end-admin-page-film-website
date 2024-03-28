@@ -12,7 +12,6 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
   const [selectedRoomIndex, setSelectedRoomIndex] = useState(0)
   const [inUsedShowTimes, setInUsedShowTimes] = useState([])
   const [selectedDate, setSelectedDate] = useState(movieInfo.launchdate)
-
   const [selectedShowTimes, setSelectedShowTimes] = useState([])
 
   const handleSelectRoom = select => {
@@ -23,8 +22,9 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
       http.get('/show-times/rooms/' + value).then(res => {
         const [data, status] = res
         if (status / 100 == 2) {
-          // gọi API thành công
           setInUsedShowTimes(data)
+        } else {
+          console.log('Error >>> ', status)
         }
       })
     }
@@ -49,8 +49,9 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
   const getExpectedShowTimes = movie => {
     // tính toán thời gian của suất chiếu đầu tiên
     // nếu đang trong ngày chiếu của phim thì lấy thời gian chiếu làm thời gian bắt đầu
-    const sDate = DateTimeHelper.MySQLtoJSDate(selectedDate)
-    const lDate = DateTimeHelper.MySQLtoJSDate(movie.launchdate)
+    const sDate = new Date(selectedDate)
+    const lDate = new Date(movie.launchdate)
+
     let initTime = 0
     if (DateTimeHelper.isSameDay(sDate, lDate)) {
       // cùng 1 ngày
@@ -59,32 +60,32 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
       // thời gian mở cửa rạp phim (có thể chỉ định lại)
       if (sDate > lDate) initTime = 8
       else {
-        alert(`Choose a date that is after ${lDate.toISOString()}`)
+        alert(`Choose a date that is after ${DateTimeHelper.JSDateToMySQLDate(lDate)}`)
         return []
       }
     }
-    // lấy các suất chiếu có thể có
-    const expectedShowTimes = DateTimeHelper.getExpectedShowTimes(sDate, movie.time, initTime)
 
+    let expectedShowTimes = DateTimeHelper.getExpectedShowTimes(sDate, movie.time, initTime)
     if (inUsedShowTimes.length > 0) {
-      expectedShowTimes.filter(e => {
+      expectedShowTimes = expectedShowTimes.filter(e => {
+        let check = true
         inUsedShowTimes.forEach(u => {
-          const actualStartTime = DateTimeHelper.MySQLtoJSDate(u.stime)
+          const actualStartTime = new Date(u.stime)
           const actualFinishTime = DateTimeHelper.getAfterTime(actualStartTime, u.ftime).date
-          if (actualStartTime > e.date) {
+          if (actualStartTime.getHours() <= e.date.getHours()) {
             if (actualFinishTime > e.date) {
-              return false // loại
+              check = false // loại
             }
           }
 
-          if (e.date < actualStartTime) {
+          if (check && e.date.getHours() <= actualStartTime.getHours()) {
             const eFinishTime = DateTimeHelper.getAfterTime(e.date, movie.time).date
-            if (eFinishTime >= actualStartTime) {
-              return false // loại
+            if (eFinishTime > actualStartTime) {
+              check = false // loại
             }
           }
         })
-        return true // xuất chiếu hợp lệ
+        return check // xuất chiếu hợp lệ
       })
     }
     return expectedShowTimes
@@ -92,7 +93,7 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
 
   useEffect(() => {
     setSelectedShowTimes(getExpectedShowTimes(movieInfo))
-  }, [selectedDate])
+  }, [selectedDate, inUsedShowTimes])
 
   const handleSubmit = e => {
     const movieId = movieInfo.id
@@ -106,7 +107,7 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
       })
       .then(res => {
         handleToggleModal(0)
-        console.log(res);
+        alert('Add showtimefd successfully!')
       })
   }
 
@@ -155,6 +156,7 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
             <p className='show-times-header'>Choose showtime(s)</p>
             <div className='showtimes'>
               <InputRow>
+                {selectedShowTimes.length <= 0 && <p className='error-text text-center'> No showtime available for this room! </p>}
                 {selectedShowTimes.map((s, index) => {
                   return (
                     <div key={index}>
