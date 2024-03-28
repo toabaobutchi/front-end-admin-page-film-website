@@ -48,7 +48,7 @@ class DateTimeHelper {
   }
 
   static JSDateToMySQLDate(date) {
-    return date.toLocaleString('sv-SE')
+    return date.toLocaleString('sv-SE') // YYYY-MM-DD HH:MM:SS
   }
 }
 

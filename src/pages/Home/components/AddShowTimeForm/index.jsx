@@ -9,7 +9,6 @@ const http = new HttpClient()
 
 function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
   const { rooms, movieInfo } = info
-
   const [selectedRoomIndex, setSelectedRoomIndex] = useState(0)
   const [inUsedShowTimes, setInUsedShowTimes] = useState([])
   const [selectedDate, setSelectedDate] = useState(movieInfo.launchdate)
