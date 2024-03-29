@@ -202,7 +202,7 @@ function Home() {
     <>
       <div className='movie-action'>
         <div className='movie-add-action'>
-          <button onClick={handleToggleCreateModal} type='button'>
+          <button className='btn btn-success' onClick={handleToggleCreateModal} type='button'>
             <i className='fas fa-plus'></i>&nbsp; Add new movie
           </button>
         </div>
@@ -223,14 +223,14 @@ function Home() {
                 src: `http://localhost:3001/images/${item.poster}`,
                 alt: 'Movie card image'
               }}>
-              <button className='btn-success' onClick={() => handleToggleAddShowtimeModal(item.id)}>
+              <button className='btn btn-success' onClick={() => handleToggleAddShowtimeModal(item.id)}>
                 <i className='far fa-calendar-plus'></i> &nbsp; Add new showtime ...
               </button>
-              <button className='btn-info' onClick={() => handleToggleUpdateModal(item.id)}>
+              <button className='btn btn-info' onClick={() => handleToggleUpdateModal(item.id)}>
                 <i className='fas fa-edit'></i> &nbsp; Update information
               </button>
               <button
-                className='btn-danger'
+                className='btn btn-danger'
                 onClick={() => {
                   confirmDeletion(item.id)
                 }}>

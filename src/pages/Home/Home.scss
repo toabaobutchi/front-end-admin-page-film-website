@@ -6,18 +6,8 @@
 }
 .movie-add-action > button {
   padding: 0.7rem 1rem;
-  border: none;
-  cursor: pointer;
   background-color: var(--success-color);
-  color: #fff;
   font-size: 1rem;
-  transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-.movie-add-action > button:hover {
-  background-color: #fff;
-  border: 1px solid var(--success-color);
-  color: var(--success-color);
 }
 
 .movie-search-action {
@@ -25,18 +15,13 @@
   width: max-content;
   display: flex;
   align-items: center;
-  // box-shadow: inset 0 0 3px var(--light-color);
   border-radius: 2.3rem;
-  // padding: 0.2rem 1rem;
   width: 30% !important;
 }
 
 .movie-search-action input {
   padding: 0.7rem 1rem;
-  // border: none;
-  // width: 40%;
   outline: none;
-  // border: none;
   font-size: 0.9rem;
   border-radius: inherit;
   flex: 1;

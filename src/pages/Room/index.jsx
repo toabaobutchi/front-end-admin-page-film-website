@@ -31,18 +31,18 @@ function Room() {
     }
   }
   const handleDeleteRoom = async id => {
-    // const [data, status] = await http.delete('/rooms/' + id);
-    // if (status / 100 !== 2) {
-    //   setToast(ToastObj.errorToast(toast, {content: 'We have some problems while deleting!'}))
-    // }
-    // else {
-    //   if (data > 0) {
-    //     setToast(ToastObj.successToast(toast, {content: 'Room deleted successfully!'}))
-    //   }
-    //   else {
-    //     setToast(ToastObj.errorToast(toast, {content: 'Cannot delete room!'}))
-    //   }
-    // }
+    const [data, status] = await http.delete('/rooms/' + id);
+    if (status / 100 !== 2) {
+      setToast(ToastObj.errorToast(toast, {content: 'We have some problems while deleting!'}))
+    }
+    else {
+      if (data > 0) {
+        setToast(ToastObj.successToast(toast, {content: 'Room deleted successfully!'}))
+      }
+      else {
+        setToast(ToastObj.errorToast(toast, {content: 'Cannot delete room!'}))
+      }
+    }
   }
 
   function refreshRoomData() {
