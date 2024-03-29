@@ -43,6 +43,17 @@ class Toast {
       open: true
     }
   }
+  static loadingToast(currentToast = {}, { title = 'Loading ...', content = 'The action is analysing ...' }) {
+    return {
+      ...currentToast,
+      title,
+      content,
+      type: 'info',
+      closeIcon: React.createElement('i', { className: 'fas fa-times' }),
+      icon: React.createElement('i', { className: 'fas fa-spinner fa-spin' }),
+      open: true
+    }
+  }
 }
 
 export default Toast

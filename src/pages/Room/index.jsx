@@ -14,13 +14,14 @@ function Room() {
   const [rooms, setRooms] = useState([]) // room list
   const [createModal, setCreateModal] = useState(false) // modal to create new room
   const [toast, setToast] = useState(new ToastObj())
-  const [willDeletedRoom, setWillDeletedRoom] = useState(null) // modal to delete
+  const [willDeletedRoom, setWillDeletedRoom] = useState(null) // modal to delete room
+  const [updateRoom, setUpdateRoom] = useState(null) // modal to update room
 
   const handleToggleCreateModal = () => {
     setCreateModal(!createModal)
   }
   const handleToggleDeleteModal = async id => {
-    if (willDeletedRoom != null) {
+    if (willDeletedRoom !== null) {
       setWillDeletedRoom(null)
     } else {
       const [data, status] = await http.get('/rooms/' + id)
@@ -30,21 +31,21 @@ function Room() {
       }
     }
   }
-  const handleDeleteRoom = async id => {
-    const [data, status] = await http.delete('/rooms/' + id);
-    if (status / 100 !== 2) {
-      setToast(ToastObj.errorToast(toast, {content: 'We have some problems while deleting!'}))
-    }
-    else {
-      if (data > 0) {
-        setToast(ToastObj.successToast(toast, {content: 'Room deleted successfully!'}))
+  const handleDeleteRoom = id => {
+    http.delete('/rooms/' + id).then(res => {
+      const [data, status] = res
+      if (status / 100 !== 2) {
+        setToast(ToastObj.errorToast(toast, { content: 'We have some problems while deleting!' }))
+      } else {
+        if (data > 0) {
+          setToast(ToastObj.successToast(toast, { content: 'Room deleted successfully!' }))
+        } else {
+          setToast(ToastObj.errorToast(toast, { content: 'Cannot delete room!' }))
+        }
       }
-      else {
-        setToast(ToastObj.errorToast(toast, {content: 'Cannot delete room!'}))
-      }
-    }
+      handleToggleDeleteModal(0)
+    })
   }
-
   function refreshRoomData() {
     http.get('/rooms').then(res => {
       const [data, status] = res
@@ -52,7 +53,6 @@ function Room() {
       else setRooms(data)
     })
   }
-
   const handleCreateSubmit = async e => {
     const formData = new FormData(e.target)
 
@@ -72,8 +72,37 @@ function Room() {
       } else {
         setToast(ToastObj.errorToast(toast, { content: 'Failed to add new room!' }))
       }
+      refreshRoomData()
     }
     handleToggleCreateModal()
+  }
+  const handleToggleUpdateModal = async id => {
+    if (updateRoom !== null) {
+      setUpdateRoom(null)
+    } else {
+      const [data, status] = await http.get('/rooms/' + id)
+      if (status / 100 === 2) {
+        setUpdateRoom(data)
+      }
+    }
+  }
+
+  const handleUpdateRoom = (e, id) => {
+    const formData = new FormData(e.target)
+    http.put('/rooms/' + id, { name: formData.get('name'), seats: formData.get('seats') }).then(res => {
+      const [data, status] = res
+      if (status / 100 !== 2) {
+        setToast(ToastObj.errorToast(toast, { content: 'Action cannot be done!' }))
+      } else {
+        if (data > 0) {
+          setToast(ToastObj.successToast(toast, { content: 'Update completelly!' }))
+          refreshRoomData()
+        } else {
+          setToast(ToastObj.errorToast(toast, { content: 'Failed to update room!' }))
+        }
+      }
+      handleToggleUpdateModal(0)
+    })
   }
 
   useEffect(() => {
@@ -121,11 +150,18 @@ function Room() {
                 <td>{room.name}</td>
                 <td>{room.seats}</td>
                 <td>
-                  <button className='room-action-edit-btn btn btn-warning'>
+                  <button onClick={() => handleToggleUpdateModal(room.id)} className='room-action-edit-btn btn btn-warning'>
                     <i className='fas fa-edit'></i> Edit
                   </button>
-                  <button onClick={() => handleToggleDeleteModal(room.id)} className='room-action-delete-btn btn btn-danger'>
+                  <button disabled={room.showtime_count !== 0} onClick={() => handleToggleDeleteModal(room.id)} className='room-action-delete-btn btn btn-danger'>
                     <i className='fas fa-trash-alt'></i> Delete
+                    {room.showtime_count !== 0 && (
+                      <div>
+                        <span className='tooltip'>
+                          This room is now having <strong className='error-text'>{room.showtime_count}</strong> showtimes
+                        </span>
+                      </div>
+                    )}
                   </button>
                 </td>
               </tr>
@@ -183,16 +219,16 @@ function Room() {
           footerButtons={[
             {
               props: {
-                className: 'btn btn-danger',
-                onClick() {
-                  handleDeleteRoom(willDeletedRoom.id)
-                }
+                className: 'btn btn-danger'
               },
               title: (
                 <>
                   <i className='fas fa-trash-alt'></i> Delete
                 </>
-              )
+              ),
+              onClick: () => {
+                handleDeleteRoom(willDeletedRoom.id)
+              }
             },
             {
               props: {
@@ -213,6 +249,52 @@ function Room() {
           <p>
             Are you sure you want to delete room <strong className='danger-text'>{willDeletedRoom.name}</strong>?
           </p>
+        </Modal>
+      )}
+
+      {updateRoom && (
+        <Modal
+          handleToggleModal={handleToggleUpdateModal}
+          modalType='warning'
+          header='Update room'
+          closeIcon={<i className='fas fa-times'></i>}
+          footerButtons={[
+            {
+              props: {
+                className: 'btn btn-warning',
+                form: 'update-room-form'
+              },
+              title: 'Update'
+            },
+            {
+              props: {
+                className: 'btn btn-info',
+                closeButton: true
+              },
+              title: 'Cancel'
+            }
+          ]}>
+          <FormInfo id='update-room-form' onSubmit={e => handleUpdateRoom(e, updateRoom.id)}>
+            <FloatLabelInput
+              label='Room name'
+              inputAttributes={{
+                id: 'room-name',
+                name: 'name',
+                type: 'text',
+                value: updateRoom.name
+              }}
+            />
+
+            <FloatLabelInput
+              label='Number of seats'
+              inputAttributes={{
+                id: 'room-seats',
+                name: 'seats',
+                type: 'number',
+                value: updateRoom.seats
+              }}
+            />
+          </FormInfo>
         </Modal>
       )}
 

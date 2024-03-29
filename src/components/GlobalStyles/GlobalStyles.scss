@@ -56,7 +56,7 @@ button.btn-warning {
   background-color: var(--warning-color);
 }
 button:disabled {
-  background-color: var(--secondary-color);
+  background-color: var(--light-color);
   cursor: not-allowed;
 }
 

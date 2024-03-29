@@ -71,6 +71,19 @@
   }
 }
 
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
+.toast-icon-spinner {
+  animation: spin 0.5s infinite;
+}
+
 .toast-icon {
   font-size: 1.5rem;
   padding-left: 0.5rem;

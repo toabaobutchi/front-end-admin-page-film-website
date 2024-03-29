@@ -74,3 +74,41 @@
   font-size: 1rem;
   border: 2px solid #fff;
 }
+
+.room-action-delete-btn:disabled {
+  position: relative;
+}
+
+.room-action-delete-btn:disabled .tooltip {
+  position: absolute;
+  top: 50%;
+  left: 110%;
+  font-size: 0.9rem;
+  transform: translateY(-50%);
+  background-color: var(--normal-color);
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  transition: 0.25s linear;
+  box-shadow: 0 0 6px var(--secondary-color);
+
+  // hiden css
+  visibility: hidden;
+  opacity: 0;
+}
+
+.room-action-delete-btn:disabled .tooltip::before {
+  position: absolute;
+  content: '';
+  top: 50%;
+  left: -10%;
+  transform: translateY(-50%);
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid var(--normal-color);
+}
+
+.room-action-delete-btn:disabled:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
