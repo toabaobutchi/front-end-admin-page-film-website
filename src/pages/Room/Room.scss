@@ -10,12 +10,6 @@
   font-size: 1rem;
 }
 
-// .room-action-add-btn:hover {
-//   background-color: #fff;
-//   color: var(--success-color);
-//   border: 0.2px solid var(--success-color);
-// }
-
 .room-action .input-group {
   width: 30%;
 }
@@ -39,9 +33,13 @@
 .room-action-search input:focus {
   border: 0.2px solid var(--primary-color);
 }
+
 .room-data {
   width: 100%;
   padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .room-data table,
@@ -58,7 +56,6 @@
 
 .room-data table.room-table {
   width: max-content;
-  margin: 0 auto;
 }
 
 .room-data table.room-table td {
@@ -111,4 +108,14 @@
 .room-action-delete-btn:disabled:hover .tooltip {
   visibility: visible;
   opacity: 1;
+}
+
+.room-data .showtimes-detail {
+  flex: 1;
+}
+
+.room-data .showtimes-detail .detail-header {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--info-color);
 }

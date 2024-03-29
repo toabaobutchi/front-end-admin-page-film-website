@@ -4,6 +4,7 @@ import FormInfo from '@comps/FormInfo'
 import { DateTimePicker, FloatLabelInput, InputRow, Select } from '@comps/Input'
 import HttpClient from '@utils/HttpClient'
 import DateTimeHelper from '@utils/DateTimeHelper'
+import CheckBox from '@comps/Input/CheckBox'
 
 const http = new HttpClient()
 
@@ -72,13 +73,13 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
         inUsedShowTimes.forEach(u => {
           const actualStartTime = new Date(u.stime)
           const actualFinishTime = DateTimeHelper.getAfterTime(actualStartTime, u.ftime).date
-          if (actualStartTime.getHours() <= e.date.getHours()) {
+          if (actualStartTime <= e.date) {
             if (actualFinishTime > e.date) {
               check = false // loại
             }
           }
 
-          if (check && e.date.getHours() <= actualStartTime.getHours()) {
+          if (check && e.date <= actualStartTime) {
             const eFinishTime = DateTimeHelper.getAfterTime(e.date, movie.time).date
             if (eFinishTime > actualStartTime) {
               check = false // loại
@@ -160,10 +161,11 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
                 {selectedShowTimes.map((s, index) => {
                   return (
                     <div key={index}>
-                      <div className='showtimes-option'>
+                      {/* <div className='showtimes-option'>
                         <input onChange={e => handleSelectShowTime(index, e.target.checked)} value={s.date.toString()} name='showtimes[]' id={`id-${index}`} type='checkbox' />
                         <label htmlFor={`id-${index}`}>{s.getString()}</label>
-                      </div>
+                      </div> */}
+                      <CheckBox label={s.getString()} inputAttributes={{ value: s.date.toString(), name: 'showtimes[]', id: `id-${index}` }} onChange={e => handleSelectShowTime(index, e.checked)} />
                       <FloatLabelInput label='Price' onChange={handleChangePrice} inputAttributes={{ type: 'number', id: `price-${index}`, disabled: !s.checked, index: index, required: Boolean(s.checked) }} />
                     </div>
                   )

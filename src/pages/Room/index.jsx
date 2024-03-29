@@ -162,11 +162,20 @@ function Room() {
                       </div>
                     )}
                   </button>
+                  <button className='btn btn-info'>
+                    <i className='fas fa-calendar-alt'></i> Showtimes
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <div className='showtimes-detail'>
+          <p className='detail-header'>Showtimes</p>
+          <div className='showtime-info-item'>
+            
+          </div>
+        </div>
       </div>
 
       {createModal && (
