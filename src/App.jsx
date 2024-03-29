@@ -1,27 +1,40 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { publishRoutes } from './routes'
-import DefaultLayout from './components/Layouts';
-import { Fragment } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import DefaultLayout from '@comps/Layouts'
+import Home from '@pages/Home'
+import Room from '@pages/Room'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <DefaultLayout>
+        <Home />
+      </DefaultLayout>
+    )
+  },
+  {
+    path: '/movies',
+    element: (
+      <DefaultLayout>
+        <Home />
+      </DefaultLayout>
+    )
+  },
+  {
+    path: '/rooms',
+    element: (
+      <DefaultLayout>
+        <Room />
+      </DefaultLayout>
+    )
+  }
+])
 
 function App() {
   return (
-    <Router>
-      <div className='App'>
-        <Routes>
-          {
-            publishRoutes.map((route, index) => {
-              let Layout = route.layout || DefaultLayout
-              if (route.layout === null || route.layout === '') {
-                Layout = Fragment
-              }
-              const Page = route.component
-              return <Route key={index} path={route.path} element={<Layout><Page /></Layout>} />
-            }
-            )
-          }
-        </Routes>
-      </div>
-    </Router>
+    <div className='App'>
+      <RouterProvider router={router} />
+    </div>
   )
 }
 

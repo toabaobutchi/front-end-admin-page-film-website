@@ -1,5 +1,7 @@
-import Home from "../pages/Home"
-import Room from "../pages/Room"
+import { createBrowserRouter } from "react-router-dom"
+import DefaultLayout from "@comps/Layouts"
+import Home from "@pages/Home"
+import Room from "@pages/Room"
 
 const publishRoutes = [
   {
@@ -15,6 +17,9 @@ const publishRoutes = [
     component: Room,
   }
 ]
+
+
+
 const privateRoutes = [
 
 ]
