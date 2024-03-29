@@ -34,23 +34,24 @@
   margin-bottom: 1rem;
 }
 
-.modal-header .modal-header-text.primary { 
+.modal-header .modal-header-text.primary {
   color: var(--primary-color);
 }
 
-.modal-header .modal-header-text.success { 
+.modal-header .modal-header-text.success {
   color: var(--success-color);
 }
 
-.modal-header .modal-header-text.danger { 
+.modal-header .modal-header-text.danger,
+.modal-header .modal-header-text.error {
   color: var(--danger-color);
 }
 
-.modal-header .modal-header-text.warning { 
+.modal-header .modal-header-text.warning {
   color: var(--warning-color);
 }
 
-.modal-header .modal-header-text.info { 
+.modal-header .modal-header-text.info {
   color: var(--info-color);
 }
 
@@ -78,4 +79,3 @@
   cursor: pointer;
   font-size: 1rem;
 }
-

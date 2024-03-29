@@ -4,7 +4,7 @@ import FloatLabelInput from '@comps/Input/FloatLabelInput'
 import HttpClient from '@utils/HttpClient'
 import Modal from '@comps/Modal'
 import FormInfo from '@comps/FormInfo'
-import toastObj from '@utils/Toast'
+import ToastObj from '@utils/Toast'
 import ToastContainer from '@comps/Toast/ToastContainer'
 import Toast from '@comps/Toast'
 
@@ -13,10 +13,36 @@ const http = new HttpClient()
 function Room() {
   const [rooms, setRooms] = useState([]) // room list
   const [createModal, setCreateModal] = useState(false) // modal to create new room
-  const [toast, setToast] = useState(toastObj)
+  const [toast, setToast] = useState(new ToastObj())
+  const [willDeletedRoom, setWillDeletedRoom] = useState(null) // modal to delete
 
   const handleToggleCreateModal = () => {
     setCreateModal(!createModal)
+  }
+  const handleToggleDeleteModal = async id => {
+    if (willDeletedRoom != null) {
+      setWillDeletedRoom(null)
+    } else {
+      const [data, status] = await http.get('/rooms/' + id)
+
+      if (status / 100 == 2) {
+        setWillDeletedRoom(data)
+      }
+    }
+  }
+  const handleDeleteRoom = async id => {
+    // const [data, status] = await http.delete('/rooms/' + id);
+    // if (status / 100 !== 2) {
+    //   setToast(ToastObj.errorToast(toast, {content: 'We have some problems while deleting!'}))
+    // }
+    // else {
+    //   if (data > 0) {
+    //     setToast(ToastObj.successToast(toast, {content: 'Room deleted successfully!'}))
+    //   }
+    //   else {
+    //     setToast(ToastObj.errorToast(toast, {content: 'Cannot delete room!'}))
+    //   }
+    // }
   }
 
   function refreshRoomData() {
@@ -38,37 +64,13 @@ function Room() {
     console.log(data, status)
 
     if (status / 100 != 2) {
-      setToast({
-        ...toast,
-        title: 'Error',
-        type: 'error',
-        open: true,
-        content: 'Error occurred while creating room!',
-        closeIcon: <i className='fas fa-times'></i>,
-        icon: <i className='fas fa-exclamation-circle'></i>
-      })
+      setToast(ToastObj.errorToast(toast, { content: 'Action cannot be done!' }))
     } else {
       if (data > 0) {
-        setToast({
-          ...toast,
-          title: 'Notification',
-          type: 'success',
-          open: true,
-          content: 'Create successfully!',
-          closeIcon: <i className='fas fa-times'></i>,
-          icon: <i className='fas fa-plus-circle'></i>
-        })
+        setToast(ToastObj.successToast(toast, { content: 'Create completelly!' }))
         refreshRoomData()
       } else {
-        setToast({
-          ...toast,
-          title: 'Error',
-          type: 'error',
-          open: true,
-          content: 'Create successfully!',
-          closeIcon: <i className='fas fa-times'></i>,
-          icon: <i className='fas fa-bug'></i>
-        })
+        setToast(ToastObj.errorToast(toast, { content: 'Failed to add new room!' }))
       }
     }
     handleToggleCreateModal()
@@ -88,7 +90,7 @@ function Room() {
   return (
     <>
       <div className='room-action'>
-        <button className='room-action-add-btn btn-success' onClick={handleToggleCreateModal}>
+        <button className='room-action-add-btn btn btn-success' onClick={handleToggleCreateModal}>
           <i className='fas fa-plus'></i>&nbsp; Add new room
         </button>
         <FloatLabelInput label='Search room' inputAttributes={{ id: 'room-search' }} additionalClasses='room-action-search'>
@@ -119,10 +121,10 @@ function Room() {
                 <td>{room.name}</td>
                 <td>{room.seats}</td>
                 <td>
-                  <button className='room-action-edit-btn btn-warning'>
+                  <button className='room-action-edit-btn btn btn-warning'>
                     <i className='fas fa-edit'></i> Edit
                   </button>
-                  <button className='room-action-delete-btn btn-danger'>
+                  <button onClick={() => handleToggleDeleteModal(room.id)} className='room-action-delete-btn btn btn-danger'>
                     <i className='fas fa-trash-alt'></i> Delete
                   </button>
                 </td>
@@ -141,14 +143,14 @@ function Room() {
           footerButtons={[
             {
               props: {
-                className: 'btn-success',
+                className: 'btn btn-success',
                 form: 'add-room-form'
               },
               title: 'Add'
             },
             {
               props: {
-                className: 'btn-danger',
+                className: 'btn btn-danger',
                 closeButton: true
               },
               title: 'Cancel'
@@ -173,6 +175,44 @@ function Room() {
               }}
             />
           </FormInfo>
+        </Modal>
+      )}
+
+      {willDeletedRoom !== null && (
+        <Modal
+          footerButtons={[
+            {
+              props: {
+                className: 'btn btn-danger',
+                onClick() {
+                  handleDeleteRoom(willDeletedRoom.id)
+                }
+              },
+              title: (
+                <>
+                  <i className='fas fa-trash-alt'></i> Delete
+                </>
+              )
+            },
+            {
+              props: {
+                className: 'btn btn-info',
+                closeButton: true
+              },
+              title: (
+                <>
+                  <i className='fas fa-times'></i> Cancel
+                </>
+              )
+            }
+          ]}
+          handleToggleModal={handleToggleDeleteModal}
+          header='Delete room'
+          modalType='danger'
+          closeIcon={<i className='fas fa-times'></i>}>
+          <p>
+            Are you sure you want to delete room <strong className='danger-text'>{willDeletedRoom.name}</strong>?
+          </p>
         </Modal>
       )}
 

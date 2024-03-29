@@ -6,7 +6,7 @@
   border-left: 0.5rem solid;
   gap: 1rem;
   transition: all 0.5s linear;
-  box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.45);
+  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.45);
 }
 
 .toast + .toast {
@@ -40,31 +40,34 @@
   color: var(--info-color);
 }
 
-.toast-error {
+.toast-error,
+.toast-danger {
   border-left-color: var(--danger-color);
 }
 
 .toast-error .toast-icon,
-.toast-error .toast-body-header {
+.toast-error .toast-body-header,
+.toast-danger .toast-icon,
+.toast-danger .toast-body-header {
   color: var(--danger-color);
 }
 
 @keyframes floatInto {
   from {
-      opacity: 0;
-      transform: translateX(100%);
+    opacity: 0;
+    transform: translateX(100%);
   }
 
   to {
-      opacity: 1;
-      transform: translateX(0);
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
 @keyframes fadeOut {
   to {
-      opacity: 0;
-      transform: translateX(100%);
+    opacity: 0;
+    transform: translateX(100%);
   }
 }
 

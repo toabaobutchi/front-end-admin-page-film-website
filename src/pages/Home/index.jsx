@@ -6,7 +6,7 @@ import { FloatLabelInput } from '@comps/Input'
 import { useEffect, useState } from 'react'
 import HttpClient from '@utils/HttpClient'
 import MovieCard from '@comps/MovieCard'
-import toastObj from '@utils/Toast'
+import ToastObj from '@utils/Toast'
 import Modal from '@comps/Modal'
 import Toast from '@comps/Toast'
 import axios from 'axios'
@@ -18,7 +18,7 @@ function Home() {
   const [createModal, setCreateModal] = useState(false)
   const [categories, setCategories] = useState([])
   const [movies, setMovies] = useState([])
-  const [toast, setToast] = useState(toastObj)
+  const [toast, setToast] = useState(new ToastObj())
   const [movieInfo, setMovieInfo] = useState(null)
   const [willDeletedItem, setWillDeletedItem] = useState(null)
   const [rooms, setRooms] = useState([])

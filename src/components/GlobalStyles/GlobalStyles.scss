@@ -32,31 +32,35 @@ html {
   margin: 0 auto;
 }
 
+button.btn {
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+
 button.btn-success {
   background-color: var(--success-color);
-  color: #fff;
 }
 
 button.btn-info {
   background-color: var(--info-color);
-  color: #fff;
 }
 
 button.btn-danger {
   background-color: var(--danger-color);
-  color: #fff;
 }
 
 button.btn-warning {
   background-color: var(--warning-color);
-  color: #fff;
 }
 button:disabled {
   background-color: var(--secondary-color);
   cursor: not-allowed;
 }
 
-.error-text {
+.error-text,
+.danger-text {
   font-size: 1rem;
   font-weight: 600;
   color: var(--danger-color);
