@@ -46,7 +46,7 @@ function Room() {
       handleToggleDeleteModal(0)
     })
   }
-  function refreshRoomData() {
+  const refreshRoomData = () => {
     http.get('/rooms').then(res => {
       const [data, status] = res
       if (status / 100 !== 2) setRooms([])
@@ -86,7 +86,6 @@ function Room() {
       }
     }
   }
-
   const handleUpdateRoom = (e, id) => {
     const formData = new FormData(e.target)
     http.put('/rooms/' + id, { name: formData.get('name'), seats: formData.get('seats') }).then(res => {
@@ -133,7 +132,7 @@ function Room() {
         <table className='room-table'>
           <tbody>
             <tr>
-              <th>Room ID</th>
+              <th>ID</th>
               <th>Name</th>
               <th>Seats</th>
               <th>Action</th>

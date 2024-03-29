@@ -10,11 +10,11 @@
   font-size: 1rem;
 }
 
-.room-action-add-btn:hover {
-  background-color: #fff;
-  color: var(--success-color);
-  border: 0.2px solid var(--success-color);
-}
+// .room-action-add-btn:hover {
+//   background-color: #fff;
+//   color: var(--success-color);
+//   border: 0.2px solid var(--success-color);
+// }
 
 .room-action .input-group {
   width: 30%;
@@ -54,7 +54,6 @@
 
 .room-data th {
   background-color: var(--light-color);
-  border: 0.2px solid var(--secondary-color);
 }
 
 .room-data table.room-table {
@@ -77,6 +76,7 @@
 
 .room-action-delete-btn:disabled {
   position: relative;
+  color: var(--secondary-color);
 }
 
 .room-action-delete-btn:disabled .tooltip {

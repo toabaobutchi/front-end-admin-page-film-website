@@ -40,6 +40,10 @@ button.btn {
   border-radius: 0.3rem;
 }
 
+button.btn:hover {
+  box-shadow: 0 0 1.5rem var(--light-color);
+}
+
 button.btn-success {
   background-color: var(--success-color);
 }
@@ -57,7 +61,7 @@ button.btn-warning {
 }
 button:disabled {
   background-color: var(--light-color);
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }
 
 .error-text,
