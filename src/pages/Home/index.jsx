@@ -226,7 +226,7 @@ function Home() {
               <button className='btn btn-success' onClick={() => handleToggleAddShowtimeModal(item.id)}>
                 <i className='far fa-calendar-plus'></i> &nbsp; Add new showtime ...
               </button>
-              <button className='btn btn-info' onClick={() => handleToggleUpdateModal(item.id)}>
+              <button className='btn btn-warning' onClick={() => handleToggleUpdateModal(item.id)}>
                 <i className='fas fa-edit'></i> &nbsp; Update information
               </button>
               <button
@@ -269,14 +269,14 @@ function Home() {
           footerButtons={[
             {
               props: {
-                className: 'btn-success',
+                className: 'btn btn-success',
                 form: 'add-movie-form'
               },
               title: 'Add'
             },
             {
               props: {
-                className: 'btn-danger',
+                className: 'btn btn-danger',
                 closeButton: true,
                 onClick() {}
               },
@@ -296,14 +296,14 @@ function Home() {
           footerButtons={[
             {
               props: {
-                className: 'btn-warning',
+                className: 'btn btn-warning',
                 form: 'update-movie-form'
               },
               title: 'Update'
             },
             {
               props: {
-                className: 'btn-danger',
+                className: 'btn btn-danger',
                 closeButton: true
               },
               title: 'Cancel'
@@ -323,7 +323,7 @@ function Home() {
           footerButtons={[
             {
               props: {
-                className: 'btn-danger'
+                className: 'btn btn-danger'
               },
               title: 'Delete',
               onClick: () => {
@@ -332,7 +332,7 @@ function Home() {
             },
             {
               props: {
-                className: 'btn-info',
+                className: 'btn btn-info',
                 closeButton: true
               },
               title: 'Cancel'
