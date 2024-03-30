@@ -1,3 +1,4 @@
+
 function ShowTimeList({ showTimes = [], handleToogleDeleteModal = () => {} }) {
   return (
     <>
@@ -15,8 +16,8 @@ function ShowTimeList({ showTimes = [], handleToogleDeleteModal = () => {} }) {
                   return (
                     <div className='showtime-info-item' key={showtime_id}>
                       <div className='showtime-info-item-label'> {showtime_time} </div>
-                      <button onClick={() => handleToogleDeleteModal(showtime_id)} className='btn showtime-info-item-delete-btn'>
-                        <i className='fas fa-trash-alt'></i>
+                      <button onClick={() => handleToogleDeleteModal(showtime_id)} className='btn showtime-info-item-info-btn'>
+                        <i className='fas fa-info-circle'></i>
                       </button>
                     </div>
                   )

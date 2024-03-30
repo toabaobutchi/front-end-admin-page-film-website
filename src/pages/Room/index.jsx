@@ -20,6 +20,7 @@ function Room() {
   const [updateRoom, setUpdateRoom] = useState(null) // modal to update room
   const [showTimes, setShowTimes] = useState([]) // modal to show
   const [willDeleteShowTime, setWillDeleteShowTime] = useState(null)
+  const [selectedRoom, setSelectedRoom] = useState(0)
 
   const handleToggleCreateModal = () => {
     setCreateModal(!createModal)
@@ -108,6 +109,7 @@ function Room() {
     })
   }
   const getShowTimesByRoom = async id => {
+    setSelectedRoom(id)
     const [data, status] = await http.get('/show-times/rooms/' + id + '?mode=brief')
     if (status / 100 === 2) {
       setShowTimes(data)
@@ -128,13 +130,14 @@ function Room() {
     }
   }
   const handleDeleteShowTime = id => {
-    http.delete('/show-time' + id).then(res => {
+    http.delete('/show-times/' + id).then(res => {
       const [data, status] = res
       if (status / 100 !== 2) {
         setToast(ToastObj.errorToast(toast, { content: 'We have some problems while deleting!' }))
       } else {
         if (data > 0) {
           setToast(ToastObj.successToast(toast, { content: 'Show time deleted successfully!' }))
+          getShowTimesByRoom(selectedRoom)
         } else {
           setToast(ToastObj.errorToast(toast, { content: 'Cannot delete show time!' }))
         }
@@ -374,16 +377,19 @@ function Room() {
             }
           ]}
           handleToggleModal={() => handleConfirmDeleteShowTime(0)}
-          modalType='danger'
-          header='Delete showtime'
+          modalType='info'
+          header='Showtime detail'
           closeIcon={<i className='fas fa-times'></i>}>
           <fieldset className='message-field'>
-            <legend className='delete-question'>Want to delete this showtime ?</legend>
+            <legend className='message-field-title'>Showtime detail</legend>
             <p>
               <strong>Room:</strong> {willDeleteShowTime.room_name}
             </p>
             <p>
               <strong>Time:</strong> {willDeleteShowTime.time}
+            </p>
+            <p>
+              <strong>Film:</strong> {willDeleteShowTime.film_name}
             </p>
           </fieldset>
         </Modal>
