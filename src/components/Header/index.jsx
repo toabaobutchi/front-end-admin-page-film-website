@@ -15,6 +15,9 @@ function Header() {
           <NavLink to='/rooms' className={({ isActive }) => (isActive ? 'nav-active' : '')}>
             Rooms
           </NavLink>
+          <NavLink to='/categories' className={({ isActive }) => (isActive ? 'nav-active' : '')}>
+            Categories
+          </NavLink>
         </div>
       </div>
 

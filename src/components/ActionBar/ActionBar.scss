@@ -1,0 +1,35 @@
+.action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.action-bar-add-btn {
+  padding: 0.7rem 1.3rem;
+  font-size: 1rem;
+}
+
+.action-bar .input-group {
+  width: 30%;
+}
+
+.action-bar-search {
+  position: relative;
+}
+
+.action-bar-search button {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  padding: 0.7rem 1rem;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.action-bar input:focus {
+  border: 0.2px solid var(--primary-color);
+}

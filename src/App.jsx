@@ -3,6 +3,7 @@ import DefaultLayout from '@comps/Layouts'
 import Home from '@pages/Home'
 import Room from '@pages/Room'
 import Error from '@pages/Error'
+import Category from '@pages/Category'
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,14 @@ const router = createBrowserRouter([
     element: (
       <DefaultLayout>
         <Room />
+      </DefaultLayout>
+    )
+  },
+  {
+    path: '/categories',
+    element: (
+      <DefaultLayout>
+        <Category />
       </DefaultLayout>
     )
   }

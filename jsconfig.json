@@ -3,7 +3,7 @@
     "paths": {
       "@comps/*": ["./src/components/*"],
       "@utils/*": ["./src/utils/*"],
-      "@page/*": ["./src/pages/*"],
+      "@pages/*": ["./src/pages/*"],
       "@/*": ["./src/*"]
     }
   }
