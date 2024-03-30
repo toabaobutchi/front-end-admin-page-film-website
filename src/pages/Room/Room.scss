@@ -38,7 +38,6 @@
   width: 100%;
   padding: 1rem 0;
   display: flex;
-  align-items: center;
   gap: 1rem;
 }
 
@@ -76,34 +75,34 @@
   color: var(--secondary-color);
 }
 
-.room-action-delete-btn:disabled .tooltip {
-  position: absolute;
-  top: 50%;
-  left: 110%;
-  font-size: 0.9rem;
-  transform: translateY(-50%);
-  background-color: var(--normal-color);
-  color: #fff;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-  transition: 0.25s linear;
-  box-shadow: 0 0 6px var(--secondary-color);
+// .room-action-delete-btn:disabled .tooltip {
+//   position: absolute;
+//   top: 50%;
+//   left: 110%;
+//   font-size: 0.9rem;
+//   transform: translateY(-50%);
+//   background-color: var(--normal-color);
+//   color: #fff;
+//   border-radius: 0.5rem;
+//   padding: 0.5rem;
+//   transition: 0.25s linear;
+//   box-shadow: 0 0 6px var(--secondary-color);
 
-  // hiden css
-  visibility: hidden;
-  opacity: 0;
-}
+//   // hiden css
+//   visibility: hidden;
+//   opacity: 0;
+// }
 
-.room-action-delete-btn:disabled .tooltip::before {
-  position: absolute;
-  content: '';
-  top: 50%;
-  left: -10%;
-  transform: translateY(-50%);
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-right: 10px solid var(--normal-color);
-}
+// .room-action-delete-btn:disabled .tooltip::before {
+//   position: absolute;
+//   content: '';
+//   top: 50%;
+//   left: -10%;
+//   transform: translateY(-50%);
+//   border-top: 10px solid transparent;
+//   border-bottom: 10px solid transparent;
+//   border-right: 10px solid var(--normal-color);
+// }
 
 .room-action-delete-btn:disabled:hover .tooltip {
   visibility: visible;
@@ -118,4 +117,72 @@
   font-weight: 700;
   font-size: 1.3rem;
   color: var(--info-color);
+  padding: 0 0 1rem;
+}
+
+.showtime-by-date {
+  margin-bottom: 1rem;
+}
+
+.showtime-date {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  padding: 0 0 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.line {
+  flex: 1;
+  position: relative;
+}
+
+.line::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 98%;
+  height: 1px;
+  background-color: var(--light-color);
+}
+
+.showtime-info-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.showtime-info-item {
+  width: max-content;
+  padding: 0.3rem 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.showtime-info-item-label {
+  font-size: 1rem;
+  color: var(--light-color);
+  padding: 0.7rem 1.3rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  width: max-content;
+  border: 2px solid var(--light-color);
+}
+
+.showtime-info-item-label:hover {
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+}
+.showtime-info-item-delete-btn {
+  color: var(--light-color) !important;
+  border-radius: 0;
+  font-size: 1.2rem;
+}
+
+.showtime-info-item-delete-btn:hover {
+  color: var(--danger-color) !important;
 }

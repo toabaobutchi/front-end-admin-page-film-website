@@ -33,20 +33,17 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
   const handleSelectDate = date => {
     setSelectedDate(date.value)
   }
-
   const handleSelectShowTime = (index, checked) => {
     // bỏ chọn
     const updatedShowTimes = [...selectedShowTimes]
     updatedShowTimes[index].checked = checked
     setSelectedShowTimes(updatedShowTimes)
   }
-
   const handleChangePrice = input => {
     const updatedPrice = [...selectedShowTimes]
     updatedPrice[parseInt(input.getAttribute('index'))].price = input.value
     setSelectedShowTimes(updatedPrice)
   }
-
   const getExpectedShowTimes = movie => {
     // tính toán thời gian của suất chiếu đầu tiên
     // nếu đang trong ngày chiếu của phim thì lấy thời gian chiếu làm thời gian bắt đầu
@@ -108,7 +105,7 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
       })
       .then(res => {
         handleToggleModal(0)
-        alert('Add showtimefd successfully!')
+        alert('Add showtime successfully!')
       })
   }
 
@@ -125,7 +122,7 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
       footerButtons={[
         {
           props: {
-            className: 'btn-success',
+            className: 'btn btn-success',
             form: 'add-showtime-form',
             disabled: selectedRoomIndex == 0
           },
@@ -133,7 +130,7 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
         },
         {
           props: {
-            className: 'btn-danger',
+            className: 'btn btn-danger',
             closeButton: true
           },
           title: 'Cancel'
@@ -161,10 +158,6 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
                 {selectedShowTimes.map((s, index) => {
                   return (
                     <div key={index}>
-                      {/* <div className='showtimes-option'>
-                        <input onChange={e => handleSelectShowTime(index, e.target.checked)} value={s.date.toString()} name='showtimes[]' id={`id-${index}`} type='checkbox' />
-                        <label htmlFor={`id-${index}`}>{s.getString()}</label>
-                      </div> */}
                       <CheckBox label={s.getString()} inputAttributes={{ value: s.date.toString(), name: 'showtimes[]', id: `id-${index}` }} onChange={e => handleSelectShowTime(index, e.checked)} />
                       <FloatLabelInput label='Price' onChange={handleChangePrice} inputAttributes={{ type: 'number', id: `price-${index}`, disabled: !s.checked, index: index, required: Boolean(s.checked) }} />
                     </div>

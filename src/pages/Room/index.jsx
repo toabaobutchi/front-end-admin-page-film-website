@@ -7,6 +7,7 @@ import FormInfo from '@comps/FormInfo'
 import ToastObj from '@utils/Toast'
 import ToastContainer from '@comps/Toast/ToastContainer'
 import Toast from '@comps/Toast'
+import Tooltip from '@comps/Tooltip'
 
 const http = new HttpClient()
 
@@ -16,6 +17,7 @@ function Room() {
   const [toast, setToast] = useState(new ToastObj())
   const [willDeletedRoom, setWillDeletedRoom] = useState(null) // modal to delete room
   const [updateRoom, setUpdateRoom] = useState(null) // modal to update room
+  const [showTimes, setShowTimes] = useState([]) // modal to show
 
   const handleToggleCreateModal = () => {
     setCreateModal(!createModal)
@@ -103,6 +105,13 @@ function Room() {
       handleToggleUpdateModal(0)
     })
   }
+  const getShowTimesByRoom = async id => {
+    const [data, status] = await http.get('/show-times/rooms/' + id + '?mode=brief')
+    if (status / 100 === 2) {
+      setShowTimes(data)
+    }
+  }
+  const handleDeleteShowTime = async id => {}
 
   useEffect(() => {
     function fetchRooms() {
@@ -147,7 +156,9 @@ function Room() {
               <tr key={room.id}>
                 <td>{room.id}</td>
                 <td>{room.name}</td>
-                <td>{room.seats}</td>
+                <td>
+                  {room.seats} <i className='fas fa-chair'></i>
+                </td>
                 <td>
                   <button onClick={() => handleToggleUpdateModal(room.id)} className='room-action-edit-btn btn btn-warning'>
                     <i className='fas fa-edit'></i> Edit
@@ -155,14 +166,12 @@ function Room() {
                   <button disabled={room.showtime_count !== 0} onClick={() => handleToggleDeleteModal(room.id)} className='room-action-delete-btn btn btn-danger'>
                     <i className='fas fa-trash-alt'></i> Delete
                     {room.showtime_count !== 0 && (
-                      <div>
-                        <span className='tooltip'>
-                          This room is now having <strong className='error-text'>{room.showtime_count}</strong> showtimes
-                        </span>
-                      </div>
+                      <Tooltip direction='top' theme='dark'>
+                        <i className='fas fa-exclamation-circle'></i> This room is now having <strong className='error-text'>{room.showtime_count}</strong> showtimes
+                      </Tooltip>
                     )}
                   </button>
-                  <button className='btn btn-info'>
+                  <button className='btn btn-info' onClick={() => getShowTimesByRoom(room.id)}>
                     <i className='fas fa-calendar-alt'></i> Showtimes
                   </button>
                 </td>
@@ -172,9 +181,31 @@ function Room() {
         </table>
         <div className='showtimes-detail'>
           <p className='detail-header'>Showtimes</p>
-          <div className='showtime-info-item'>
-            
-          </div>
+          {showTimes.length <= 0 && <p className='error-text'>No available showtime!</p>}
+          {showTimes.map((s, index) => {
+            const showtime = s.showtime.split(';')
+            return (
+              <div className='showtime-by-date' key={index}>
+                <div className='showtime-date'>
+                  {' '}
+                  <span>{s.showtime_date}</span> <div className='line'></div>{' '}
+                </div>
+                <div className='showtime-info-list'>
+                  {showtime.map(t => {
+                    const { showtime_id, showtime_time } = JSON.parse(t)
+                    return (
+                      <div className='showtime-info-item' key={showtime_id}>
+                        <div className='showtime-info-item-label'> {showtime_time} </div>
+                        <button onClick={() => handleDeleteShowTime(showtime_id)} className='btn showtime-info-item-delete-btn'>
+                          <i className='fas fa-trash-alt'></i>
+                        </button>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
         </div>
       </div>
 

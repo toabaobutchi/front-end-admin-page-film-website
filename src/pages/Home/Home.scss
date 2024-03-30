@@ -58,34 +58,34 @@
   border: 0.2px solid var(--primary-color);
 }
 
-.showtimes-option {
-  margin: 0.5rem 0;
-  height: max-content;
-  padding: 0.5rem;
-}
+// .showtimes-option {
+//   margin: 0.5rem 0;
+//   height: max-content;
+//   padding: 0.5rem;
+// }
 
 .showtimes-option .input-group {
   width: 60%;
 }
 
-.showtimes-option input[type='checkbox'] {
-  display: none;
-  appearance: none;
-  padding: 0;
-}
-.showtimes-option label {
-  padding: 0.5rem 1rem;
-  width: max-content;
-  border: 0.5px solid var(--light-color);
-  color: var(--light-color);
-  cursor: pointer;
-  display: block;
-}
-.showtimes-option input[type='checkbox']:checked ~ label {
-  background-color: var(--primary-color);
-  color: #fff;
-  font-weight: 600;
-}
+// .showtimes-option input[type='checkbox'] {
+//   display: none;
+//   appearance: none;
+//   padding: 0;
+// }
+// .showtimes-option label {
+//   padding: 0.5rem 1rem;
+//   width: max-content;
+//   border: 0.5px solid var(--light-color);
+//   color: var(--light-color);
+//   cursor: pointer;
+//   display: block;
+// }
+// .showtimes-option input[type='checkbox']:checked ~ label {
+//   background-color: var(--primary-color);
+//   color: #fff;
+//   font-weight: 600;
+// }
 
 .show-times-container {
   width: 100%;
