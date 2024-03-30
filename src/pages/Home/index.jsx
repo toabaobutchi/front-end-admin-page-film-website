@@ -219,6 +219,7 @@ function Home() {
           return (
             <MovieCard
               key={item.id}
+              movie={item}
               imgAttributes={{
                 src: `http://localhost:3001/images/${item.poster}`,
                 alt: 'Movie card image'

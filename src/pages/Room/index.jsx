@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react'
-import './Room.scss'
 import FloatLabelInput from '@comps/Input/FloatLabelInput'
-import HttpClient from '@utils/HttpClient'
-import Modal from '@comps/Modal'
-import FormInfo from '@comps/FormInfo'
-import ToastObj from '@utils/Toast'
 import ToastContainer from '@comps/Toast/ToastContainer'
-import Toast from '@comps/Toast'
-import Tooltip from '@comps/Tooltip'
 import ShowTimeList from './components/ShowTimeList'
+import { useEffect, useState } from 'react'
+import HttpClient from '@utils/HttpClient'
+import FormInfo from '@comps/FormInfo'
+import Tooltip from '@comps/Tooltip'
+import ToastObj from '@utils/Toast'
+import Modal from '@comps/Modal'
+import Toast from '@comps/Toast'
+import './Room.scss'
 
 const http = new HttpClient()
 
@@ -214,7 +214,8 @@ function Room() {
         </table>
         <div className='showtimes-detail'>
           <p className='detail-header'>Showtimes</p>
-          {showTimes.length <= 0 && <p className='error-text'>No available showtime!</p>}
+          {selectedRoom == 0 && <p className='error-text'>Choose a room to see showtime detail</p>}
+          {showTimes.length <= 0 && selectedRoom != 0 && <p className='error-text'>No available showtime!</p>}
           <ShowTimeList showTimes={showTimes} handleToogleDeleteModal={handleConfirmDeleteShowTime} />
         </div>
       </div>

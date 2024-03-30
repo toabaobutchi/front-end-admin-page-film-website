@@ -1,7 +1,8 @@
 import FormInfo from '../../../../components/FormInfo'
 import { FloatLabelInput, InputRow, FloatLabelTextArea, FileDialog, DateTimePicker, Select } from '../../../../components/Input'
 
-function UpdateMovieForm({ handleSubmit = () => {}, categories = [], data = {} }) {
+function UpdateMovieForm({ handleSubmit = () => { }, categories = [], data = {} }) {
+  console.log(data)
   const { name = '', director = '', launchdate = '', time = '', finishtime = '', actors = '', description = '', rated = '', id = '' } = data
   return (
     <>
@@ -12,8 +13,8 @@ function UpdateMovieForm({ handleSubmit = () => {}, categories = [], data = {} }
         </InputRow>
         <InputRow>
           <FloatLabelInput label='Time' inputAttributes={{ id: 'time', type: 'number', name: 'time', value: time }} />
-          <DateTimePicker label='Launch date' inputAttributes={{ id: 'launchdate', type: 'datetime-local', name: 'launchdate', value: launchdate }} />
-          <DateTimePicker label='Fishish date' inputAttributes={{ id: 'finishtime', type: 'datetime-local', name: 'finishtime', value: finishtime }} />
+          <DateTimePicker label='Launch date' inputAttributes={{ id: 'launchdate', type: 'datetime-local', name: 'launchdate', value: launchdate, readOnly: true }} />
+          <DateTimePicker label='Fishish date' inputAttributes={{ id: 'finishtime', type: 'datetime-local', name: 'finishtime', value: finishtime, readOnly: Boolean(finishtime) }} />
         </InputRow>
         <FloatLabelInput label='Actors' inputAttributes={{ id: 'actors', type: 'text', name: 'actors', value: actors }} />
         <FloatLabelTextArea label='Description' textareaAttributes={{ id: 'desc', name: 'description', value: description }} />
