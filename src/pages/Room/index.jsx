@@ -8,6 +8,7 @@ import ToastObj from '@utils/Toast'
 import ToastContainer from '@comps/Toast/ToastContainer'
 import Toast from '@comps/Toast'
 import Tooltip from '@comps/Tooltip'
+import ShowTimeList from './components/ShowTimeList'
 
 const http = new HttpClient()
 
@@ -18,6 +19,7 @@ function Room() {
   const [willDeletedRoom, setWillDeletedRoom] = useState(null) // modal to delete room
   const [updateRoom, setUpdateRoom] = useState(null) // modal to update room
   const [showTimes, setShowTimes] = useState([]) // modal to show
+  const [willDeleteShowTime, setWillDeleteShowTime] = useState(null)
 
   const handleToggleCreateModal = () => {
     setCreateModal(!createModal)
@@ -111,7 +113,35 @@ function Room() {
       setShowTimes(data)
     }
   }
-  const handleDeleteShowTime = async id => {}
+  const handleConfirmDeleteShowTime = async id => {
+    if (willDeleteShowTime !== null) {
+      setWillDeleteShowTime(null)
+    } else {
+      const [data, status] = await http.get('/show-times/' + id)
+      if (status / 100 === 2) {
+        if (data.ticket_count !== 0) {
+          setToast(ToastObj.errorToast(toast, { content: `This show time cannot be deleted as it's now having ${data.ticket_count} ticket(s) !` }))
+        } else {
+          setWillDeleteShowTime(data)
+        }
+      }
+    }
+  }
+  const handleDeleteShowTime = id => {
+    http.delete('/show-time' + id).then(res => {
+      const [data, status] = res
+      if (status / 100 !== 2) {
+        setToast(ToastObj.errorToast(toast, { content: 'We have some problems while deleting!' }))
+      } else {
+        if (data > 0) {
+          setToast(ToastObj.successToast(toast, { content: 'Show time deleted successfully!' }))
+        } else {
+          setToast(ToastObj.errorToast(toast, { content: 'Cannot delete show time!' }))
+        }
+      }
+      handleConfirmDeleteShowTime(0)
+    })
+  }
 
   useEffect(() => {
     function fetchRooms() {
@@ -182,30 +212,7 @@ function Room() {
         <div className='showtimes-detail'>
           <p className='detail-header'>Showtimes</p>
           {showTimes.length <= 0 && <p className='error-text'>No available showtime!</p>}
-          {showTimes.map((s, index) => {
-            const showtime = s.showtime.split(';')
-            return (
-              <div className='showtime-by-date' key={index}>
-                <div className='showtime-date'>
-                  {' '}
-                  <span>{s.showtime_date}</span> <div className='line'></div>{' '}
-                </div>
-                <div className='showtime-info-list'>
-                  {showtime.map(t => {
-                    const { showtime_id, showtime_time } = JSON.parse(t)
-                    return (
-                      <div className='showtime-info-item' key={showtime_id}>
-                        <div className='showtime-info-item-label'> {showtime_time} </div>
-                        <button onClick={() => handleDeleteShowTime(showtime_id)} className='btn showtime-info-item-delete-btn'>
-                          <i className='fas fa-trash-alt'></i>
-                        </button>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })}
+          <ShowTimeList showTimes={showTimes} handleToogleDeleteModal={handleConfirmDeleteShowTime} />
         </div>
       </div>
 
@@ -334,6 +341,51 @@ function Room() {
               }}
             />
           </FormInfo>
+        </Modal>
+      )}
+
+      {willDeleteShowTime && (
+        <Modal
+          id='showtime-delete-modal'
+          footerButtons={[
+            {
+              props: {
+                className: 'btn btn-danger'
+              },
+              title: (
+                <>
+                  <i className='fas fa-trash-alt'></i> Delete
+                </>
+              ),
+              onClick: () => {
+                handleDeleteShowTime(willDeleteShowTime.id)
+              }
+            },
+            {
+              props: {
+                className: 'btn btn-info',
+                closeButton: true
+              },
+              title: (
+                <>
+                  <i className='fas fa-times'></i> Cancel
+                </>
+              )
+            }
+          ]}
+          handleToggleModal={() => handleConfirmDeleteShowTime(0)}
+          modalType='danger'
+          header='Delete showtime'
+          closeIcon={<i className='fas fa-times'></i>}>
+          <fieldset className='message-field'>
+            <legend className='delete-question'>Want to delete this showtime ?</legend>
+            <p>
+              <strong>Room:</strong> {willDeleteShowTime.room_name}
+            </p>
+            <p>
+              <strong>Time:</strong> {willDeleteShowTime.time}
+            </p>
+          </fieldset>
         </Modal>
       )}
 
