@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import DefaultLayout from '@comps/Layouts'
 import Home from '@pages/Home'
 import Room from '@pages/Room'
+import Error from '@pages/Error'
 
 const router = createBrowserRouter([
   {
@@ -9,6 +10,11 @@ const router = createBrowserRouter([
     element: (
       <DefaultLayout>
         <Home />
+      </DefaultLayout>
+    ),
+    errorElement: (
+      <DefaultLayout>
+        <Error />
       </DefaultLayout>
     )
   },

@@ -1,0 +1,41 @@
+.error-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3rem;
+  flex-direction: column;
+}
+
+.error-header {
+  font-size: 4rem;
+  color: var(--danger-color);
+}
+
+.error-sub-header {
+  font-size: 1.5rem;
+  font-style: italic;
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+}
+
+.not-found-icon {
+  color: var(--warning-color);
+}
+
+.error-message {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  font-weight: normal;
+}
+
+.go-home-btn {
+  text-decoration: none;
+  font-weight: 500;
+  color: var(--danger-color);
+  padding: 0.5rem 0.7rem;
+  border: 2px solid var(--danger-color);
+  background-color: #fff;
+  font-size: 1.3rem;
+  margin-top: 1rem;
+  border-radius: 0.3rem;
+}

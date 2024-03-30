@@ -225,10 +225,10 @@ function Home() {
                 alt: 'Movie card image'
               }}>
               <button className='btn btn-success' onClick={() => handleToggleAddShowtimeModal(item.id)}>
-                <i className='far fa-calendar-plus'></i> &nbsp; Add new showtime ...
+                <i className='far fa-calendar-plus'></i> &nbsp; Add new showtimes
               </button>
               <button className='btn btn-warning' onClick={() => handleToggleUpdateModal(item.id)}>
-                <i className='fas fa-edit'></i> &nbsp; Update information
+                <i className='fas fa-edit'></i> &nbsp; Update movie
               </button>
               <button
                 className='btn btn-danger'
