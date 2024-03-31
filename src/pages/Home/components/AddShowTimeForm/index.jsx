@@ -44,53 +44,53 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
     updatedPrice[parseInt(input.getAttribute('index'))].price = input.value
     setSelectedShowTimes(updatedPrice)
   }
-  const getExpectedShowTimes = movie => {
-    // tính toán thời gian của suất chiếu đầu tiên
-    // nếu đang trong ngày chiếu của phim thì lấy thời gian chiếu làm thời gian bắt đầu
-    const sDate = new Date(selectedDate)
-    const lDate = new Date(movie.launchdate)
+  // const getExpectedShowTimes = movie => {
+  //   // tính toán thời gian của suất chiếu đầu tiên
+  //   // nếu đang trong ngày chiếu của phim thì lấy thời gian chiếu làm thời gian bắt đầu
+  //   const sDate = new Date(selectedDate)
+  //   const lDate = new Date(movie.launchdate)
 
-    let initTime = 0
-    if (DateTimeHelper.isSameDay(sDate, lDate)) {
-      // cùng 1 ngày
-      initTime = lDate.getHours()
-    } else {
-      // thời gian mở cửa rạp phim (có thể chỉ định lại)
-      if (sDate > lDate) initTime = 8
-      else {
-        alert(`Choose a date that is after ${DateTimeHelper.JSDateToMySQLDate(lDate)}`)
-        return []
-      }
-    }
+  //   let initTime = 0
+  //   if (DateTimeHelper.isSameDay(sDate, lDate)) {
+  //     // cùng 1 ngày
+  //     initTime = lDate.getHours()
+  //   } else {
+  //     // thời gian mở cửa rạp phim (có thể chỉ định lại)
+  //     if (sDate > lDate) initTime = 8
+  //     else {
+  //       alert(`Choose a date that is after ${DateTimeHelper.JSDateToMySQLDate(lDate)}`)
+  //       return []
+  //     }
+  //   }
 
-    let expectedShowTimes = DateTimeHelper.getExpectedShowTimes(sDate, movie.time, initTime)
-    if (inUsedShowTimes.length > 0) {
-      expectedShowTimes = expectedShowTimes.filter(e => {
-        let check = true
-        inUsedShowTimes.forEach(u => {
-          const actualStartTime = new Date(u.stime)
-          const actualFinishTime = DateTimeHelper.getAfterTime(actualStartTime, u.ftime).date
-          if (actualStartTime <= e.date) {
-            if (actualFinishTime > e.date) {
-              check = false // loại
-            }
-          }
+  //   let expectedShowTimes = DateTimeHelper.getExpectedShowTimes(sDate, movie.time, initTime)
+  //   if (inUsedShowTimes.length > 0) {
+  //     expectedShowTimes = expectedShowTimes.filter(e => {
+  //       let check = true
+  //       inUsedShowTimes.forEach(u => {
+  //         const actualStartTime = new Date(u.stime)
+  //         const actualFinishTime = DateTimeHelper.getAfterTime(actualStartTime, u.ftime).date
+  //         if (actualStartTime <= e.date) {
+  //           if (actualFinishTime > e.date) {
+  //             check = false // loại
+  //           }
+  //         }
 
-          if (check && e.date <= actualStartTime) {
-            const eFinishTime = DateTimeHelper.getAfterTime(e.date, movie.time).date
-            if (eFinishTime > actualStartTime) {
-              check = false // loại
-            }
-          }
-        })
-        return check // xuất chiếu hợp lệ
-      })
-    }
-    return expectedShowTimes
-  }
+  //         if (check && e.date <= actualStartTime) {
+  //           const eFinishTime = DateTimeHelper.getAfterTime(e.date, movie.time).date
+  //           if (eFinishTime > actualStartTime) {
+  //             check = false // loại
+  //           }
+  //         }
+  //       })
+  //       return check // xuất chiếu hợp lệ
+  //     })
+  //   }
+  //   return expectedShowTimes
+  // }
 
   useEffect(() => {
-    setSelectedShowTimes(getExpectedShowTimes(movieInfo))
+    setSelectedShowTimes(DateTimeHelper.getShowtimes(selectedDate, movieInfo, inUsedShowTimes))
   }, [selectedDate, inUsedShowTimes])
 
   const handleSubmit = e => {

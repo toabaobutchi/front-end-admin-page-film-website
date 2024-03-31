@@ -3,8 +3,8 @@
   --content-width: 70%;
   --primary-color: #2d83f5;
   // --success-color: #018d13;
-  --success-color: #00c000;
-  --success-dark-color: #018c01;
+  --success-color: #01b001;
+  --success-dark-color: #027d02;
   --secondary-color: #777;
   --info-text: #156bdb;
   --normal-color: #333;
@@ -25,8 +25,7 @@
 }
 
 html {
-  // font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .content {
@@ -34,7 +33,7 @@ html {
   margin: 0 auto;
 }
 
-button.btn {
+.btn {
   color: #fff;
   cursor: pointer;
   outline: none;
@@ -75,4 +74,76 @@ button:disabled {
 
 .text-center {
   text-align: center;
+}
+
+.posr {
+  position: relative;
+}
+
+.line {
+  position: relative;
+  width: 100%;
+}
+
+.line::before {
+  position: absolute;
+  content: '';
+  height: 1px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  background-color: var(--light-color);
+  width: 100%;
+}
+
+.line::after {
+  position: absolute;
+  content: attr(content);
+  padding: 0 0.8rem;
+  background-color: #fff;
+  width: max-content;
+}
+
+.line.content-center::after {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.line.content-left:after {
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.fw-bold {
+  font-weight: bold;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.text-success {
+  color: var(--success-color);
+}
+
+.no-underline {
+  text-decoration: none !important;
+}
+
+.btn-outline.btn-success {
+  border: 1px solid var(--success-color);
+  color: var(--success-color);
+  background-color: #fff;
+}
+
+.btn-outline {
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
 }

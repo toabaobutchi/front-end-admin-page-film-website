@@ -9,6 +9,8 @@ import ToastObj from '@utils/Toast'
 import Modal from '@comps/Modal'
 import Toast from '@comps/Toast'
 import './Room.scss'
+import ActionBar from '@comps/ActionBar'
+import { Link } from 'react-router-dom'
 
 const http = new HttpClient()
 
@@ -159,16 +161,7 @@ function Room() {
 
   return (
     <>
-      <div className='room-action'>
-        <button className='room-action-add-btn btn btn-success' onClick={handleToggleCreateModal}>
-          <i className='fas fa-plus'></i>&nbsp; Add new room
-        </button>
-        <FloatLabelInput label='Search room' inputAttributes={{ id: 'room-search' }} additionalClasses='room-action-search'>
-          <button type='button'>
-            <i className='fas fa-search'></i>
-          </button>
-        </FloatLabelInput>
-      </div>
+      <ActionBar searchLabel='Search room' addButtonContent='Add new room' handleToggleCreateModal={handleToggleCreateModal} />
 
       <div className='room-data'>
         <table className='room-table'>
@@ -216,7 +209,13 @@ function Room() {
           <p className='detail-header'>Showtimes</p>
           {selectedRoom == 0 && <p className='error-text'>Choose a room to see showtime detail</p>}
           {showTimes.length <= 0 && selectedRoom != 0 && <p className='error-text'>No available showtime!</p>}
-          <ShowTimeList showTimes={showTimes} handleToogleDeleteModal={handleConfirmDeleteShowTime} />
+          <ShowTimeList showTimes={showTimes} handleRefreshShowTime={getShowTimesByRoom} handleToogleDeleteModal={handleConfirmDeleteShowTime} />
+          <p className='mt-1 text-success'>
+            <i className='fas fa-check-circle'></i> You can also add new showtime(s) at{' '}
+            <Link className='no-underline fw-bold btn btn-outline' to='/movies'>
+              Movies page
+            </Link>
+          </p>
         </div>
       </div>
 
@@ -396,7 +395,7 @@ function Room() {
         </Modal>
       )}
 
-      <ToastContainer>{toast.open && <Toast {...toast} />}</ToastContainer>
+      <ToastContainer>{toast.open && <Toast {...toast} onRemove={() => setToast({ ...toast, open: false })} />}</ToastContainer>
     </>
   )
 }

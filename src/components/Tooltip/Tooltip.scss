@@ -1,3 +1,10 @@
+.has-tooltip {
+  position: relative;
+}
+.has-tooltip:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
 .tooltip {
   position: absolute;
   border-radius: 0.3rem;

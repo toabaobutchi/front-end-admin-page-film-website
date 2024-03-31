@@ -11,6 +11,7 @@ import Modal from '@comps/Modal'
 import Toast from '@comps/Toast'
 import axios from 'axios'
 import './Home.scss'
+import ActionBar from '@comps/ActionBar'
 
 const http = new HttpClient() // axios utility
 
@@ -200,19 +201,7 @@ function Home() {
 
   return (
     <>
-      <div className='movie-action'>
-        <div className='movie-add-action'>
-          <button className='btn btn-success' onClick={handleToggleCreateModal} type='button'>
-            <i className='fas fa-plus'></i>&nbsp; Add new movie
-          </button>
-        </div>
-
-        <FloatLabelInput label='Search movie' inputAttributes={{ id: 'movie-search-text', type: 'text' }} additionalClasses={'movie-search-action'}>
-          <button type='button'>
-            <i className='fas fa-search'></i>
-          </button>
-        </FloatLabelInput>
-      </div>
+      <ActionBar searchLabel='Search movie' addButtonContent='Add new movie' handleToggleCreateModal={handleToggleCreateModal} />
 
       <div className='movie-list'>
         {movies.map(item => {

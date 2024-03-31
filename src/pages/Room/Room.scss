@@ -1,39 +1,3 @@
-.room-action {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 0;
-}
-
-.room-action-add-btn {
-  padding: 0.7rem 1.3rem;
-  font-size: 1rem;
-}
-
-.room-action .input-group {
-  width: 30%;
-}
-
-.room-action-search {
-  position: relative;
-}
-
-.room-action-search button {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  padding: 0.7rem 1rem;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.room-action-search input:focus {
-  border: 0.2px solid var(--primary-color);
-}
-
 .room-data {
   width: 100%;
   padding: 1rem 0;
@@ -104,25 +68,10 @@
   align-items: center;
 }
 
-.line {
-  flex: 1;
-  position: relative;
-}
-
-.line::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  width: 98%;
-  height: 1px;
-  background-color: var(--light-color);
-}
-
 .showtime-info-list {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 1rem;
 }
 
@@ -174,4 +123,10 @@
 }
 .message-field p {
   padding: 0.5rem;
+}
+
+.showtime-info-item-add-btn {
+  padding: 0.5rem;
+  font-size: 1rem;
+  height: max-content;
 }
