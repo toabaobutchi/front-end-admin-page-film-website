@@ -1,8 +1,20 @@
-import { Link } from 'react-router-dom'
-import './Error.scss'
+import { Link, useRouteError } from 'react-router-dom'
 import Modal from '@comps/Modal'
+import './Error.scss'
 
 function Error() {
+  const error = useRouteError()
+  let subHeader = '',
+    message = ''
+  switch (error.status) {
+    case 404:
+      subHeader = 'Page not found'
+      message = 'The page you requested is not existing!'
+      break
+    default:
+      subHeader = error.status + ' - ' + error.statusText
+      message = 'Something went wrong'
+  }
   return (
     <Modal>
       <div className='error-content'>
@@ -12,8 +24,8 @@ function Error() {
           </span>
           &nbsp;Oops!
         </h1>
-        <h2 className='error-sub-header'>404 - Not found</h2>
-        <h3 className='error-message'>The page you requested is not existing!</h3>
+        <h2 className='error-sub-header'>{subHeader}</h2>
+        <h3 className='error-message'>{message}</h3>
         <Link to='/movies' className='go-home-btn' text='Go to Home'>
           Go to Home
         </Link>

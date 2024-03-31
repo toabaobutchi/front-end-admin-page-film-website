@@ -12,11 +12,6 @@ const router = createBrowserRouter([
       <DefaultLayout>
         <Home />
       </DefaultLayout>
-    ),
-    errorElement: (
-      <DefaultLayout>
-        <Error />
-      </DefaultLayout>
     )
   },
   {
@@ -40,6 +35,13 @@ const router = createBrowserRouter([
     element: (
       <DefaultLayout>
         <Category />
+      </DefaultLayout>
+    )
+  }, {
+    path: '*',
+    element: (
+      <DefaultLayout>
+        <Error />
       </DefaultLayout>
     )
   }

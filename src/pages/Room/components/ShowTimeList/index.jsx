@@ -4,6 +4,7 @@ import Modal from '@comps/Modal'
 import FormInfo from '@comps/FormInfo'
 import { DateTimePicker, Select, CheckBox, FloatLabelInput, InputRow } from '@comps/Input'
 import DateTimeHelper from '@utils/DateTimeHelper'
+import Tooltip from '@comps/Tooltip'
 
 const http = new HttpClient()
 
@@ -51,7 +52,7 @@ function ShowTimeList({ showTimes = [], handleToogleDeleteModal = () => {}, hand
     updatedShowTimes[index].checked = checked
     setShowTimeList(updatedShowTimes)
   }
-  const handleSubmitAddShowTime = (e) => {
+  const handleSubmitAddShowTime = e => {
     const movieId = selectedFilm.id
     const roomId = room.id
     const showTimes = showTimeList.filter(show => show.checked == true).map(show => ({ time: DateTimeHelper.JSDateToMySQLDate(show.date), price: show.price }))
@@ -87,10 +88,12 @@ function ShowTimeList({ showTimes = [], handleToogleDeleteModal = () => {}, hand
                   const { showtime_id, showtime_time } = JSON.parse(t)
                   return (
                     <div className='showtime-info-item' key={showtime_id}>
-                      <div className='showtime-info-item-label'> {showtime_time} </div>
-                      <button onClick={() => handleToogleDeleteModal(showtime_id)} className='btn showtime-info-item-info-btn'>
-                        <i className='fas fa-info-circle'></i>
-                      </button>
+                      <div className='showtime-info-item-label has-tooltip' onClick={() => handleToogleDeleteModal(showtime_id)}>
+                        {showtime_time}
+                        <Tooltip direction='top' theme='dark'>
+                          See and remove showtime
+                        </Tooltip>
+                      </div>
                     </div>
                   )
                 })}
