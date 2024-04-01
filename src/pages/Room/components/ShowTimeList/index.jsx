@@ -8,7 +8,7 @@ import Tooltip from '@comps/Tooltip'
 
 const http = new HttpClient()
 
-function ShowTimeList({ showTimes = [], handleToogleDeleteModal = () => {}, handleRefreshShowTime = () => {} }) {
+function ShowTimeList({ showTimes = [], handleToogleDeleteModal = () => {}, handleRefreshShowTime = () => {}, setToast = (response) => {}}) {
   const [room, setRoom] = useState(null)
   const [films, setFilms] = useState([])
   const [selectedFilm, setSelectedFilm] = useState(null)
@@ -64,7 +64,7 @@ function ShowTimeList({ showTimes = [], handleToogleDeleteModal = () => {}, hand
       })
       .then(res => {
         handleToggleCreateShowTimeModal()
-        alert('Add showtime successfully!')
+        setToast(res)
         handleRefreshShowTime(roomId)
       })
   }

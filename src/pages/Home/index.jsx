@@ -2,16 +2,14 @@ import UpdateMovieForm from './components//UpdateMovieForm'
 import AddShowTimeForm from './components/AddShowTimeForm'
 import CreateMovieForm from './components/CreateMovieForm'
 import ToastContainer from '@comps/Toast/ToastContainer'
-import { FloatLabelInput } from '@comps/Input'
 import { useEffect, useState } from 'react'
 import HttpClient from '@utils/HttpClient'
+import ActionBar from '@comps/ActionBar'
 import MovieCard from '@comps/MovieCard'
 import ToastObj from '@utils/Toast'
 import Modal from '@comps/Modal'
 import Toast from '@comps/Toast'
-import axios from 'axios'
 import './Home.scss'
-import ActionBar from '@comps/ActionBar'
 
 const http = new HttpClient() // axios utility
 
@@ -38,8 +36,9 @@ function Home() {
     setCreateModal(prev => !prev)
     // mở modal thì gọi API
     if (!createModal) {
-      axios.get('http://localhost:3001/api/v1/admin/categories').then(res => {
-        setCategories(res.data)
+      http.get('/categories').then(res => {
+        const [data] = res
+        setCategories(data)
       })
     }
   }
@@ -58,37 +57,12 @@ function Home() {
     const [data, status] = await http.post('/films', formData)
 
     if (status / 100 != 2) {
-      // status code ~=2xx
-      setToast({
-        ...toast,
-        type: 'error',
-        title: 'Error',
-        content: 'Error occurred while creating movie!',
-        open: true,
-        icon: <i className='fas fa-exclamation-circle'></i>,
-        closeIcon: <i className='fas fa-times'></i>
-      })
+      setToast(ToastObj.errorToast(toast, { content: 'Error occurred while creating movie' }))
     } else if (data > 0) {
-      setToast({
-        ...toast,
-        type: 'success',
-        title: 'Notification',
-        content: 'A movie was created successfully!',
-        open: true,
-        icon: <i className='fas fa-plus-circle'></i>,
-        closeIcon: <i className='fas fa-times'></i>
-      })
+      setToast(ToastObj.successToast(toast, { content: 'A movie was created successfully!' }))
       fetchMoviesData()
     } else {
-      setToast({
-        ...toast,
-        open: true,
-        type: 'error',
-        title: 'Notification',
-        content: 'Can not create the movie!',
-        icon: <i className='fas fa-bug'></i>,
-        closeIcon: <i className='fas fa-times'></i>
-      })
+      setToast(ToastObj.errorToast(toast, { content: 'Can not create the movie!' }))
     }
     handleToggleCreateModal() // đóng modal chứa form
   }
@@ -104,84 +78,43 @@ function Home() {
     }
   }
   const handleDeleteMovie = id => {
-    http
-      .delete(`/films/${id}`)
-      .then(res => {
-        const [data, status] = res
-        if (status / 100 !== 2) {
-          setToast({
-            ...toast,
-            type: 'error',
-            title: 'Error',
-            content: 'An error occurred!',
-            open: true,
-            icon: <i className='fas fa-exclamation-circle'></i>,
-            closeIcon: <i className='fas fa-times'></i>
-          })
-        } else if (data > 0) {
-          setToast({
-            ...toast,
-            type: 'success',
-            title: 'Notification',
-            content: 'A movie was deleted successfully!',
-            open: true,
-            icon: <i className='fas fa-trash-alt'></i>,
-            closeIcon: <i className='fas fa-times'></i>
-          })
-          fetchMoviesData()
-        } else {
-          setToast({
-            ...toast,
-            open: true,
-            type: 'error',
-            title: 'Notification',
-            content: 'Can not delete the movie!',
-            icon: <i className='fas fa-bug'></i>,
-            closeIcon: <i className='fas fa-times'></i>
-          })
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    http.delete(`/films/${id}`).then(res => {
+      const [data, status] = res
+      if (status / 100 !== 2) {
+        setToast(ToastObj.errorToast(toast, { content: data.message }))
+      } else if (data > 0) {
+        setToast(ToastObj.successToast(toast, { content: 'Movie deleted successfully!' }))
+        fetchMoviesData()
+      } else {
+        setToast(ToastObj.errorToast(toast, { content: 'Can not delete the movie!' }))
+      }
+      setWillDeletedItem(null) // đóng modal
+    })
   }
   const handleUpdateSubmit = async (e, id) => {
     const formData = new FormData(e.target)
     const [data, status] = await http.put(`/films/${id}`, formData)
     if (status / 100 != 2) {
-      // status code ~=2xx
-      setToast({
-        ...toast,
-        type: 'error',
-        title: 'Error',
-        content: 'Error occurred while updating movie!',
-        open: true,
-        icon: <i className='fas fa-exclamation-circle'></i>,
-        closeIcon: <i className='fas fa-times'></i>
-      })
+      setToast(ToastObj.errorToast(toast, { content: data.message }))
     } else {
       if (data > 0) {
-        setToast({
-          ...toast,
-          type: 'success',
-          title: 'Notification',
-          content: 'A movie was updated successfully!',
-          open: true,
-          icon: <i className='fas fa-edit'></i>,
-          closeIcon: <i className='fas fa-times'></i>
-        })
+        setToast(ToastObj.successToast(toast, { content: 'Movie updated successfully' }))
         fetchMoviesData()
-        setMovieInfo(null)
+        setMovieInfo(null) // đóng update modal
       } else {
-        setToast({
-          ...toast,
-          open: true,
-          type: 'error',
-          title: 'Notification',
-          content: 'Can not update the movie!',
-          icon: <i className='fas fa-bug'></i>,
-          closeIcon: <i className='fas fa-times'></i>
-        })
+        setToast(ToastObj.errorToast(toast, { content: 'Can not update the movie!' }))
+      }
+    }
+  }
+  const handleShowToastAfterAddShowTime = res => {
+    const [data, status] = res
+    if (status / 100 !== 2) {
+      setToast(ToastObj.errorToast(toast, { content: data.message }))
+    } else {
+      if (data !== 0) {
+        setToast(ToastObj.successToast(toast, { content: 'Showtimes added successfully!' }))
+      } else {
+        setToast(ToastObj.errorToast(toast, { content: 'Failed to add showtimes!' }))
       }
     }
   }
@@ -189,8 +122,8 @@ function Home() {
   // hiển thị data
   useEffect(() => {
     const fetchMovies = () => {
-      http.get('/films').then(response => {
-        const [data, status] = response
+      http.get('/films').then(res => {
+        const [data, status] = res
         if (status / 100 !== 2) {
           setMovies([])
         } else setMovies(data)
@@ -204,51 +137,33 @@ function Home() {
       <ActionBar searchLabel='Search movie' addButtonContent='Add new movie' handleToggleCreateModal={handleToggleCreateModal} />
 
       <div className='movie-list'>
-        {movies.map(item => {
-          return (
-            <MovieCard
-              key={item.id}
-              movie={item}
-              imgAttributes={{
-                src: `http://localhost:3001/images/${item.poster}`,
-                alt: 'Movie card image'
-              }}>
-              <button className='btn btn-success' onClick={() => handleToggleAddShowtimeModal(item.id)}>
-                <i className='far fa-calendar-plus'></i> &nbsp; Add new showtimes
-              </button>
-              <button className='btn btn-warning' onClick={() => handleToggleUpdateModal(item.id)}>
-                <i className='fas fa-edit'></i> &nbsp; Update movie
-              </button>
-              <button
-                className='btn btn-danger'
-                onClick={() => {
-                  confirmDeletion(item.id)
+        {movies &&
+          movies.map(item => {
+            return (
+              <MovieCard
+                key={item.id}
+                movie={item}
+                imgAttributes={{
+                  src: `http://localhost:3001/images/${item.poster}`,
+                  alt: 'Movie card image'
                 }}>
-                <i className='far fa-trash-alt'></i> &nbsp; Delete film
-              </button>
-            </MovieCard>
-          )
-        })}
+                <button className='btn btn-success' onClick={() => handleToggleAddShowtimeModal(item.id)}>
+                  <i className='far fa-calendar-plus'></i> &nbsp; Add new showtimes
+                </button>
+                <button className='btn btn-warning' onClick={() => handleToggleUpdateModal(item.id)}>
+                  <i className='fas fa-edit'></i> &nbsp; Update movie
+                </button>
+                <button
+                  className='btn btn-danger'
+                  onClick={() => {
+                    confirmDeletion(item.id)
+                  }}>
+                  <i className='far fa-trash-alt'></i> &nbsp; Delete film
+                </button>
+              </MovieCard>
+            )
+          })}
       </div>
-
-      <ToastContainer>
-        {toast.open && (
-          <Toast
-            title={toast.title}
-            icon={toast.icon}
-            content={toast.content}
-            closeIcon={toast.closeIcon}
-            options={{ ...toast.options }}
-            type={toast.type}
-            onRemove={() =>
-              setToast({
-                ...toast,
-                open: false
-              })
-            }
-          />
-        )}
-      </ToastContainer>
 
       {createModal && (
         <Modal
@@ -333,7 +248,21 @@ function Home() {
           </p>
         </Modal>
       )}
-      {movieInfo && rooms.length > 0 && <AddShowTimeForm handleToggleModal={handleToggleAddShowtimeModal} info={{ movieInfo, rooms }} />}
+      {movieInfo && rooms.length > 0 && <AddShowTimeForm setToast={handleShowToastAfterAddShowTime} handleToggleModal={handleToggleAddShowtimeModal} info={{ movieInfo, rooms }} />}
+
+      <ToastContainer>
+        {toast.open && (
+          <Toast
+            {...toast}
+            onRemove={() =>
+              setToast({
+                ...toast,
+                open: false
+              })
+            }
+          />
+        )}
+      </ToastContainer>
     </>
   )
 }

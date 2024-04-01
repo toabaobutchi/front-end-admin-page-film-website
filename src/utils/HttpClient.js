@@ -46,7 +46,7 @@ class HttpClient {
       return [response.data, response.status]
     } catch (err) {
       console.table(err) // log error
-      return [null, null]
+      return [err.response.data, err.status]
     }
   }
 }

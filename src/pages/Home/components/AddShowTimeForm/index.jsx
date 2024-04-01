@@ -8,7 +8,7 @@ import CheckBox from '@comps/Input/CheckBox'
 
 const http = new HttpClient()
 
-function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
+function AddShowTimeForm({ setToast = (response) => {} ,handleToggleModal = () => {}, info = {} }) {
   const { rooms, movieInfo } = info
   const [selectedRoomIndex, setSelectedRoomIndex] = useState(0)
   const [inUsedShowTimes, setInUsedShowTimes] = useState([])
@@ -105,7 +105,7 @@ function AddShowTimeForm({ handleToggleModal = () => {}, info = {} }) {
       })
       .then(res => {
         handleToggleModal(0)
-        alert('Add showtime successfully!')
+        setToast(res)
       })
   }
 

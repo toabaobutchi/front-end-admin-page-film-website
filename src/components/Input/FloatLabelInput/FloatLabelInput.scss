@@ -2,7 +2,7 @@
   position: relative;
 }
 
-.float-label label {
+.float-label > label {
   position: absolute;
   top: 50%;
   left: 3%;
@@ -12,23 +12,47 @@
   cursor: text;
 }
 
-.float-label input:focus~label,
-.float-label input:not(.float-label input:placeholder-shown, :required, [type=date]) ~ label,
-.float-label label.float,
-.float-label input:required:valid ~ label {
-  padding: 0 0.5rem;
+.float-label > input:focus ~ label,
+.float-label > input:not(.float-label input:placeholder-shown, :required, [type='date']) ~ label,
+.float-label > label.float,
+.float-label > input:required:valid ~ label {
+  padding: 0 0.4rem;
   top: 0;
   background-color: #fff;
   left: 2%;
   color: var(--primary-color);
   font-weight: bold;
+  font-size: 0.9rem;
 }
 
-.float-label input:required:valid ~ label { // ghi đè CSS ở trên
+.float-label > input:required:valid ~ label {
+  // ghi đè CSS ở trên
   color: var(--success-color);
 }
 
-.float-label input[type=number]::-webkit-inner-spin-button, 
-.float-label input[type=number]::-webkit-outer-spin-button {
+.float-label > input[type='number']::-webkit-inner-spin-button,
+.float-label > input[type='number']::-webkit-outer-spin-button {
   appearance: none;
+}
+
+.show-password {
+  position: absolute;
+  top: 130%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0;
+}
+.show-password > input[type='checkbox'] {
+  display: none;
+}
+
+.show-password label {
+  cursor: pointer;
+  color: var(--secondary-color);
+}
+.show-password > input[type='checkbox']:checked ~ label {
+  color: var(--normal-color);
 }

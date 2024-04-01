@@ -147,6 +147,20 @@ function Room() {
       handleConfirmDeleteShowTime(0)
     })
   }
+  const handleShowToastAfterAddShowTime = (res) => {
+    const [data, status] = res
+    if (status / 100 !== 2) {
+      setToast(ToastObj.errorToast(toast, { content: data.message }))
+    }
+    else {
+      if (data > 0) {
+        setToast(ToastObj.successToast(toast, { content: 'Add showtimes successfully!' }))
+      }
+      else {
+        setToast(ToastObj.errorToast(toast, { content: 'Cannot add showtimes!' }))
+      }
+    }
+  }
 
   useEffect(() => {
     function fetchRooms() {
@@ -209,7 +223,7 @@ function Room() {
           <p className='detail-header'>Showtimes</p>
           {selectedRoom == 0 && <p className='error-text'>Choose a room to see showtime detail</p>}
           {showTimes.length <= 0 && selectedRoom != 0 && <p className='error-text'>No available showtime!</p>}
-          <ShowTimeList showTimes={showTimes} handleRefreshShowTime={getShowTimesByRoom} handleToogleDeleteModal={handleConfirmDeleteShowTime} />
+          <ShowTimeList showTimes={showTimes} handleRefreshShowTime={getShowTimesByRoom} handleToogleDeleteModal={handleConfirmDeleteShowTime} setToast={handleShowToastAfterAddShowTime} />
           <p className='mt-1 text-success'>
             <i className='fas fa-check-circle'></i> You can also add new showtime(s) at{' '}
             <Link className='no-underline fw-bold btn btn-outline' to='/movies'>

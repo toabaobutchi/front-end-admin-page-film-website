@@ -1,0 +1,43 @@
+.login-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.welcome-text {
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.login-sub-text {
+  font-size: 1.2rem;
+  font-style: italic;
+  margin-top: 1rem;
+}
+
+.login-heading {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+#login-form {
+  margin-top: 3rem;
+  padding: 0.5rem 1rem;
+  width: 50%;
+}
+
+#login-form .input-group {
+  margin-top: 1rem;
+}
+
+#login-form .input-group > input {
+  padding: 1rem;
+  border-radius: 0.3rem;
+}
+
+.login-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+}

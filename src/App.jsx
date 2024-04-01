@@ -4,6 +4,7 @@ import Home from '@pages/Home'
 import Room from '@pages/Room'
 import Error from '@pages/Error'
 import Category from '@pages/Category'
+import Login from '@pages/Login'
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,12 @@ const router = createBrowserRouter([
         <Category />
       </DefaultLayout>
     )
-  }, {
+  },
+  {
+    path: '/login',
+    element: <Login />
+  },
+  {
     path: '*',
     element: (
       <DefaultLayout>

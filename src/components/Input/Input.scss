@@ -20,22 +20,7 @@
   border: 0.2px solid var(--light-color);
 }
 
-.input-group input[type=radio],
-.input-group input[type=checkbox] {
+.input-group > input[type='radio'],
+.input-group > input[type='checkbox'] {
   display: none;
 }
-
-// .input-group input[type=radio] ~ label,
-// .input-group input[type=checkbox] ~ label {
-//   cursor: pointer;
-//   padding: 0.5rem;
-//   border: 0.2px solid var(--light-color);
-// }
-
-// .input-group input:checked ~ label {
-//   font-weight: bold;
-//   color: var(--primary-color);
-//   font-size: 1rem;
-//   border: none;
-//   border-bottom: 0.2px solid var(--primary-color);
-// }
