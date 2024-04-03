@@ -49,6 +49,7 @@ function Room() {
         } else {
           setToast(ToastObj.errorToast(toast, { content: 'Cannot delete room!' }))
         }
+        refreshRoomData()
       }
       handleToggleDeleteModal(0)
     })
