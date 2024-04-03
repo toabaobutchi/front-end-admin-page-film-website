@@ -17,7 +17,7 @@ function ShowTimeList({ showTimes = [], handleToogleDeleteModal = () => {}, hand
   const [showTimeList, setShowTimeList] = useState([])
 
   const handleToggleCreateShowTimeModal = async (roomId, sDate) => {
-    if (room !== null && films.length > 0) {
+    if (room !== null && films.length !== 0) {
       setRoom(null)
       setFilms([])
       setSelectedFilm(null)
@@ -77,6 +77,7 @@ function ShowTimeList({ showTimes = [], handleToogleDeleteModal = () => {}, hand
     <>
       {showTimes.length !== 0 &&
         showTimes.map((s, index) => {
+          console.log('Log >>> ', s)
           const showtime = s.showtime.split(';')
           return (
             <div className='showtime-by-date' key={index}>

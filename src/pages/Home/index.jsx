@@ -144,7 +144,7 @@ function Home() {
                 key={item.id}
                 movie={item}
                 imgAttributes={{
-                  src: `http://localhost:3001/images/${item.poster}`,
+                  src: `https://be-ticket-film.onrender.com/images/${item.poster}`,
                   alt: 'Movie card image'
                 }}>
                 <button className='btn btn-success' onClick={() => handleToggleAddShowtimeModal(item.id)}>

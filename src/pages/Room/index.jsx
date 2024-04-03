@@ -124,11 +124,12 @@ function Room() {
     } else {
       const [data, status] = await http.get('/show-times/' + id)
       if (status / 100 === 2) {
-        if (data.ticket_count !== 0) {
-          setToast(ToastObj.errorToast(toast, { content: `This show time cannot be deleted as it's now having ${data.ticket_count} ticket(s) !` }))
-        } else {
-          setWillDeleteShowTime(data)
-        }
+        // if (data.ticket_count !== 0) {
+        //   setToast(ToastObj.errorToast(toast, { content: `This show time cannot be deleted as it's now having ${data.ticket_count} ticket(s) !` }))
+        // } else {
+        //   setWillDeleteShowTime(data)
+        // }
+        setWillDeleteShowTime(data)
       }
     }
   }
