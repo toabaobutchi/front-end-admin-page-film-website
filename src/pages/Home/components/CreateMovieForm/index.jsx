@@ -33,8 +33,8 @@ function CreateMovieForm({ handleSubmit = () => {}, categories = [] }) {
               min: 1
             }}
           />
-          <DateTimePicker label='Launch date' inputAttributes={{ id: 'launchdate', name: 'launchdate', type: 'datetime-local' }} />
-          <DateTimePicker label='Fishish date' inputAttributes={{ id: 'finishtime', name: 'finishtime', type: 'datetime-local' }} />
+          <DateTimePicker label='Launch date' inputAttributes={{ id: 'launch_date', name: 'launch_date', type: 'datetime-local' }} />
+          <DateTimePicker label='Fishish date' inputAttributes={{ id: 'finish_date', name: 'finish_date', type: 'datetime-local' }} />
         </InputRow>
         <FloatLabelInput label='Actors' inputAttributes={{ id: 'actors', type: 'text', name: 'actors' }} />
         <FloatLabelTextArea label='Description' textareaAttributes={{ id: 'desc', name: 'description' }} />
@@ -52,7 +52,7 @@ function CreateMovieForm({ handleSubmit = () => {}, categories = [] }) {
           }}
         />
         <FloatLabelInput label='Rated' inputAttributes={{ id: 'rated', type: 'text', name: 'rated' }} />
-        <Select name='categoryid' label='Category'>
+        <Select name='category_id' label='Category'>
           {categories.map(item => {
             return (
               <option key={item.id} value={item.id}>

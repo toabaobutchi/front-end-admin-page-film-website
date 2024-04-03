@@ -54,7 +54,9 @@ class DateTimeHelper {
     // tính toán thời gian của suất chiếu đầu tiên
     // nếu đang trong ngày chiếu của phim thì lấy thời gian chiếu làm thời gian bắt đầu
     const sDate = new Date(selectedDate)
-    const lDate = new Date(movie.launchdate)
+    const lDate = new Date(movie.launch_date)
+
+    console.log(sDate);
 
     let initTime = 0
     if (DateTimeHelper.isSameDay(sDate, lDate)) {
